@@ -1,0 +1,10 @@
+{
+    schema.volatiles = [
+        "Ticket"
+        "Fare"
+        "Cabin"
+    ]
+    schema.primary_key = [
+        "PassengerId"
+    ]
+}
