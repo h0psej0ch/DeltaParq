@@ -1,0 +1,236 @@
+%%
+%% This is file `sample-manuscript.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `manuscript')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from sample-manuscript.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file samples.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%%
+%% Commands for TeXCount
+%TC:macro \cite [option:text,text]
+%TC:macro \citep [option:text,text]
+%TC:macro \citet [option:text,text]
+%TC:envir table 0 1
+%TC:envir table* 0 1
+%TC:envir tabular [ignore] word
+%TC:envir displaymath 0 word
+%TC:envir math 0 word
+%TC:envir comment 0 0
+%%
+%%
+%% The first command in your LaTeX source must be the \documentclass command.
+%%%% Small single column format, used for CIE, CSUR, DTRAP, JACM, JDIQ, JEA, JERIC, JETC, PACMCGIT, TAAS, TACCESS, TACO, TALG, TALLIP (formerly TALIP), TCPS, TDSCI, TEAC, TECS, TELO, THRI, TIIS, TIOT, TISSEC, TIST, TKDD, TMIS, TOCE, TOCHI, TOCL, TOCS, TOCT, TODAES, TODS, TOIS, TOIT, TOMACS, TOMM (formerly TOMCCAP), TOMPECS, TOMS, TOPC, TOPLAS, TOPS, TOS, TOSEM, TOSN, TQC, TRETS, TSAS, TSC, TSLP, TWEB.
+% \documentclass[acmsmall]{acmart}
+
+%%%% Large single column format, used for IMWUT, JOCCH, PACMPL, POMACS, TAP, PACMHCI
+% \documentclass[acmlarge,screen]{acmart}
+
+%%%% Large double column format, used for TOG
+
+\documentclass[acmtog, authorversion, tikz, border=10pt]{acmart}
+\usepackage[htt]{hyphenat}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{pgfgantt}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, bending, positioning, calc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{todonotes}
+
+
+% continuation indent patch http://tex.stackexchange.com/questions/78776/forced-indentation-in-algorithmicx
+\newlength{\continueindent}
+\setlength{\continueindent}{2em}
+\usepackage{etoolbox}
+\makeatletter
+\newcommand*{\ALG@customparshape}{\parshape 2 \leftmargin \linewidth \dimexpr\ALG@tlm+\continueindent\relax \dimexpr\linewidth+\leftmargin-\ALG@tlm-\continueindent\relax}
+\apptocmd{\ALG@beginblock}{\ALG@customparshape}{}{\errmessage{failed to patch}}
+\makeatother
+% end continuation indent patch
+
+
+%%%% Generic manuscript mode, required for submission
+%%%% and peer review
+%\documentclass[manuscript,screen,review]{acmart}
+%% Fonts used in the template cannot be substituted; margin 
+%% adjustments are not allowed.
+%%
+%% \BibTeX command to typeset BibTeX logo in the docs
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+
+%% Rights management information.  This information is sent to you
+%% when you complete the rights form.  These commands have SAMPLE
+%% values in them; it is your responsibility as an author to replace
+%% the commands and values with those provided to you when you
+%% complete the rights form.
+
+\setcopyright{acmcopyright}
+\copyrightyear{2022}
+\acmYear{2022}
+
+%% These commands are for a PROCEEDINGS abstract or paper.
+\acmConference[TScIT 45]{45$^{th}$ Twente Student Conference on IT}{July 3,
+  2026}{Enschede, The Netherlands}
+%
+%  Uncomment \acmBooktitle if th title of the proceedings is different
+%  from ``Proceedings of ...''!
+%
+%\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
+% June 03--05, 2018, Woodstock, NY} 
+%\acmPrice{15.00}
+%\acmISBN{978-1-4503-XXXX-X/18/06}
+
+
+%%
+%% Submission ID.
+%% Use this when submitting an article to a sponsored event. You'll
+%% receive a unique submission ID from the organizers
+%% of the event, and this ID should be used as the parameter to this command.
+%%\acmSubmissionID{123-A56-BU3}
+
+%%
+%% For managing citations, it is recommended to use bibliography
+%% files in BibTeX format.
+%%
+%% You can then either use BibTeX with the ACM-Reference-Format style,
+%% or BibLaTeX with the acmnumeric or acmauthoryear sytles, that include
+%% support for advanced citation of software artefact from the
+%% biblatex-software package, also separately available on CTAN.
+%%
+%% Look at the sample-*-biblatex.tex files for templates showcasing
+%% the biblatex styles.
+%%
+
+%%
+%% The majority of ACM publications use numbered citations and
+%% references.  The command \citestyle{authoryear} switches to the
+%% "author year" style.
+%%
+%% If you are preparing content for an event
+%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
+%% citations and references.
+%% Uncommenting
+%% the next command will enable that style.
+%%\citestyle{acmauthoryear}
+
+%%
+%% end of the preamble, start of the body of the document source.
+\begin{document}
+
+%%
+%% The "title" command has an optional parameter,
+%% allowing the author to define a "short title" to be used in page headers.
+\title{DeltaParq -  Using Delta Compression for Efficient Storage of OpenINTELs Historical DNS Records}
+
+%%
+%% The "author" command and its associated commands are used to define
+%% the authors and their affiliations.
+%% Of note is the shared affiliation of the first two authors, and the
+%% "authornote" and "authornotemark" commands
+%% used to denote shared contribution to the research.
+
+\author{Tristan Bottenberg}
+\email{t.d.bottenberg@student.utwente.nl}
+\affiliation{%
+  \institution{University of Twente}
+  \streetaddress{P.O. Box 217}
+  \city{Enschede}
+  \country{The Netherlands}
+  \postcode{7500AE}
+}
+
+
+
+%%
+%% By default, the full list of authors will be used in the page
+%% headers. Often, this list is too long, and will overlap
+%% other information printed in the page headers. This command allows
+%% the author to define a more concise list
+%% of authors' names for this purpose.
+%% \renewcommand{\shortauthors}{Authors}
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+    The OpenINTEL project gathers millions of records from the Domain Name System (DNS) 
+    for the purpose of historical DNS research. Based on the hypothesis that a big part of 
+    the DNS remains unchanged between measurements, this research will create a delta-based
+    storage system. This system would only store the changes compared to a snapshot instead of
+    all daily retrieved data points to improve on storage efficiency. Furthermore, the research 
+    would test different delta-based compression strategies to determine an optimal strategy 
+    taking both storage and analysis efficiency into account.
+\end{abstract}
+
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{DNS, Delta-Compression, Big Data}
+
+\settopmatter{printacmref=false}
+
+%% A "teaser" image appears between the author and affiliation
+%% information and the body of the document, and typically spans the
+%% page.
+%% \begin{teaserfigure}
+%%   \includegraphics[width=\textwidth]{sampleteaser}
+%%   \caption{Seattle Mariners at Spring Training, 2010.}
+%%   \Description{Enjoying the baseball game from the third-base
+%%   seats. Ichiro Suzuki preparing to bat.}
+%%   \label{fig:teaser}
+%% \end{teaserfigure}
+
+%%
+%% This command processes the author and affiliation and title
+%% information and builds the first part of the formatted document.
+\maketitle
+
+\input{sections/introduction.tex}
+
+\input{sections/related_work.tex}
+
+\input{sections/hypothesis_proof.tex}
+
+\input{sections/system_design.tex}
+
+\input{sections/evaluation_framework.tex}
+
+\input{sections/experiments_results.tex}
+
+\input{sections/strategy_diagram.tex}
+
+\input{sections/conclusion}
+
+\input{sections/methodologies.tex}
+
+\input{sections/expected_results.tex}
+
+%%
+%% The next two lines define the bibliography style to be used, and
+%% the bibliography file.
+\bibliographystyle{ACM-Reference-Format}
+
+\bibliography{references}
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-authordraft.tex'.

@@ -1,0 +1,32 @@
+\section{Evaluating The Hypothesis}
+
+\begin{table}
+    \caption{}\label{tab:measurement_differences}
+    \todo[inline]{fill in this table}
+    \begin{center}
+        \begin{tabular}[c]{l|l}
+            \hline
+            \multicolumn{1}{c|}{\textbf{}} & 
+            \multicolumn{1}{c}{\textbf{}} \\
+            \hline
+            a & b \\
+            c & d \\
+            
+            \hline
+        \end{tabular}
+    \end{center}
+\end{table}
+
+To validate the hypothesis set out in the introduction that a majority 
+of the DNS records remain unchanged between measurements, a set-based 
+comparison can be defined. Let $D_n$ be the complete set of measurements 
+on day $n$. The set of changed records, which are all records present in 
+$D_n$ and not present in $D_{n-1}$ can be denoted as:
+$$\Delta_n = D_{n} \setminus D_{n-1}$$
+Table \ref{tab:measurement_differences} shows the results of this set 
+operation over the span of may 2026 on the dataset of the Liechtenstein dataset. 
+With this it can be determined that the hypothesis is correct, only 30\% of 
+the rows change per measurement of which the RSIG responses make up the large part. 
+The rest of the response types show little change. \todo[inline]{Use the real percentage from the table}
+
+
