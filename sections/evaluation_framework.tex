@@ -1,9 +1,27 @@
 \section{Evaluation Framework}
 
 To answer the main research question on the efficiency gains in both storage and analysis, an 
-evaluation framework is presented that measures the impact of 
+evaluation framework is presented that has the ability to measure the impact of using different 
+versions of the DeltaParq system compared to a base version of the system as it is currently 
+used.
 
 \subsection{Measurement Metrics}
+
+The primary metrics measured are the total storage size for storing a month worth of data, which 
+was determined as the maximum self-contained unit in the system design, and the analysis time for each 
+day of the month given a specific analysis method. The storage size for the full month will be able to,
+once compared to the storage size of a base version, determine the storage efficiency of each version, 
+while the analysis time for each day of the month will be able to determine, compared to the same base 
+version, how much the analysis efficiency has increased or decreased. 
+
+While these two metrics capture the full scope necessary for answering the research question. The research 
+is held to determine if a delta-based storage system is a viable option for the OPENIntel dataset. From this 
+follow two extra metrics. First the time to construct the delta-compressed version which will be 
+used to determine the effect of using delta-compression on the daily task of gathering and storing all the new 
+data. Secondly, the time to reconstruct the full original data will be measurement to report the effects that may 
+occur when needing the full data for possible migration or other use cases.
+
+% The client commisioning the research, the OPENIntel project, 
 
 \subsection{Measurement Validity}
 
