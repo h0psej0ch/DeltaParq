@@ -1,33 +1,48 @@
 import pyspark.sql.functions as psf
+from pyspark.storagelevel import StorageLevel
 
-def hash_aggregate(df, primary_key):
-
-    non_key_cols = [c for c in sorted(df.columns) if c not in primary_key]
+def hash_aggregate(df, primary_key: list[str]):
+    value_cols = [x for x in df.columns if x not in primary_key]
+    # Combine all value columns into a single hash per row
+    row_hash = psf.md5(psf.concat_ws("||", *[psf.col(c).cast("string") 
+                                          for c in value_cols]))
     
-    # Use xxhash64 on each column natively without string casting
-    row_hash = psf.xxhash64(*[psf.col(c) for c in non_key_cols])
-    
-    return df.withColumn("row_hash", row_hash) \
-        .groupBy(primary_key) \
-        .agg(psf.sum("row_hash").alias("group_hash"))
-
+    # Aggregate all row hashes within a block into one block hash
+    # order-insensitively by sorting before aggregating
+    block_hash = (
+        df.withColumn("_row_hash", row_hash)
+          .groupBy(*primary_key)
+          .agg(
+              psf.sort_array(psf.collect_list("_row_hash")).alias("_sorted_hashes")
+          )
+          .withColumn("_block_hash", psf.md5(psf.concat_ws(",", "_sorted_hashes")))
+          .drop("_sorted_hashes")
+    )
+    return block_hash
 
 def generate_hash_delta(base_df, update_df, primary_key):
-
     base_hashes = hash_aggregate(base_df, primary_key)
+    update_df.persist(StorageLevel.MEMORY_ONLY)
     update_hashes = hash_aggregate(update_df, primary_key)
-    joined_hashes = base_hashes.alias("base").join(update_hashes.alias("update"), on=primary_key, how="full_outer").persist()
-    joined_hashes.count()
 
-    changed = joined_hashes.filter(
-        psf.col("base.group_hash").isNull() | 
-        (psf.col("base.group_hash") != psf.col("update.group_hash"))
-    ).select([psf.col(f"update.{k}").alias(k) for k in primary_key])
+    joined = update_hashes.alias("updated").join(
+        base_hashes.alias("base"),
+        on=primary_key,
+        how="left"
+    )
 
-    delta_df = changed.join(update_df, on=primary_key, how="inner")
+    changed_keys = joined.filter(
+        psf.col("base._block_hash").isNull() |
+        (psf.col("base._block_hash") != psf.col("updated._block_hash"))
+    ).select(*[psf.col(f"updated.{key}") for key in primary_key])
 
-    joined_hashes.unpersist()
-    return delta_df
+    returnable = update_df.join(
+        psf.broadcast(changed_keys),
+        on=primary_key,
+        how="right"
+    ) 
+    update_df.unpersist()
+    return returnable
 
 def generate_subtract_delta(base_df, update_df, primary_key):
 
