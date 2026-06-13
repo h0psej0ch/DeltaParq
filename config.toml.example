@@ -1,0 +1,27 @@
+
+delta_generation_type = "hash" # "subtract"
+
+[monthly_config]
+#strategy = "first_of_the_month"
+#strategy = "progressive"
+strategy = "daily_snapshot"
+
+explicit_removal_save = false 
+
+[monthly_config.schema]
+volatiles = [
+    "rtt",
+    "timestamp",
+    "worker_id"
+]
+primary_key = [
+    "query_name",
+    "query_type"
+]
+
+[storage]
+type = "s3"
+
+[storage.s3]
+bucket = ""
+partitions = 6
