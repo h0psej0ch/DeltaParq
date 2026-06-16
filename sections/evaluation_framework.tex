@@ -21,8 +21,53 @@ used to determine the effect of using delta-compression on the daily task of gat
 data. Secondly, the time to reconstruct the full original data will be measurement to report the effects that may 
 occur when needing the full data for possible migration or other use cases.
 
-% The client commisioning the research, the OPENIntel project, 
-
 \subsection{Measurement Validity}
 
+To ensure the measurements made by the evaluation framework can compose meaningful comparison between 
+different versions of the system, the following validity considerations are addressed. 
+
+\subsubsection{Baseline}
+
+To be able to compare the improvement of a delta-based system, a strict baseline needs to be measured. This baseline 
+needs to represent the current state of the system being used. For this, a full daily snapshot is stored. The full snapshot
+bypasses all the steps of the DeltaParq system to ensure there is no extra compute being done that would make the baseline 
+differ from the actual used system. Therefore, the full snapshot does not undergo any schema decomposition or generation and 
+application of deltas. For the construction time, the full data is read from its original position and written to the DeltaParq 
+storage in full. As the delta-based strategies utilize the same reading procedure from the original procedure and then compute 
+a delta which is stored, a comparison can from this be done on just the time compute and write time against the baselines write time.
+For the retrieval of a dataframe, used in the analysis function of the evaluation, the full dataframe is read from the DeltaParq 
+position of the full snapshot to simulate the analysis time the function would take on the current data.
+
+\subsubsection{Dataset}
+
+Due to time constraints, the system cannot be evaluated over the full OPENIntel dataset. Therefore, two options to 
+evaluate a possible representative subset are used. Firstly, the system is evaluated over the dataset of a small TLD, 
+$.li$, belonging to the microstate Liechtenstein. While the $.li$ dataset will be able to evaluate the capabilities of 
+the DeltaParq over a complete dataset, it cannot guarantee that the dataset is representative for the full OPENIntel 
+dataset. Secondly, the system is evaluated over a sampled version of a dataset of a bigger TLD, $.ch$, belonging to Switzerland.
+By collecting all the distinct primary keys present in the full month worth of data, a sample of 1\% of the primary keys will be 
+taken. Using this, the data of the full month is sampled to 1\% of its size. This approach ensures that the sampled dataset 
+retains the same change rate distribution as the full dataset, since the selection of domains is independent of whether 
+those domains changed between measurements.
+
+\subsubsection{Analysis}
+
+For the measurement on analysis speed, an analysis function was provided by the client commissioning the research. This analysis 
+has been actively used on both of the chosen datasets. Therefore, the analysis function is able to reflect the practical impact 
+of the delta-based storage system on actual usage of the system.
+
+\subsubsection{Statistical Significance}
+
+Each version of the DeltaParq is evaluated over every month of the year such that there cannot be any influence from specific times 
+of the year or lengths of each month. Furthermore, each month is evaluated 3 times per version, such that the statistical significance 
+can be raised, resulting in a total of 36 evaluations per version per dataset. To ensure independent measurements, all versions are interleaved 
+such that all versions run on all months before repeating the same month. Next to that, the cache of the pyspark workers is cleared before every 
+step of the analysis to ensure no version profits more of the order than any other.
+
 \subsection{Measurement Methodology}
+
+For each strategy, month, and dataset, the measurement consists of the same three phases: The dataset is stored into the DeltaParq using the 
+$put\_list()$ function, the analysis function is executed over each day of the month with as input a dataframe retrieved using the $get()$ 
+function, and finally using a specially made $rebuild()$ function the original dataframes are retrieved and stored at a supplied path. 
+During measurements, the storage size is measured using the Hadoop FileSystems API present in pyspark for each day in the month. The storage, 
+analysis, and rebuild times are captured using a helper class that interfaces with the python time module.
