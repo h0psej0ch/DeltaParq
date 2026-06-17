@@ -1,0 +1,43 @@
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            ylabel=Time (s),
+            height = 8cm,
+            major x tick style = transparent,
+            ybar=2*\pgflinewidth,
+            bar width=20pt,
+            ymajorgrids = true,
+            symbolic x coords={Build, Restore},
+            xtick = data,
+            scaled y ticks = false,
+            enlarge x limits=0.50,
+            ymin=0,
+            legend cell align=left,
+            legend columns=2,
+        ]
+            \addplot[style={fill=gray!40}, error bars/.cd, y dir=both, y explicit] 
+            coordinates {
+                (Build,358.06317939360935) += (0,22.29172724981596) -= (0,22.29172724981596)
+                (Restore,345.4245344400406) += (0,22.024252476060145) -= (0,22.024252476060145)
+            };
+            \addplot[style={fill=blue!40}, error bars/.cd, y dir=both, y explicit] 
+            coordinates {
+                (Build,426.34392098585766) += (0,25.648076243368518) -= (0,25.648076243368518)
+                (Restore,260.7008381684621) += (0,19.652307154362607) -= (0,19.652307154362607)
+            };
+            \addplot[style={fill=teal!40}, error bars/.cd, y dir=both, y explicit] 
+            coordinates {
+                (Build,405.5375253756841) += (0,27.821906010475146) -= (0,27.821906010475146)
+                (Restore,180.86869804064432) += (0,9.737124344548397) -= (0,9.737124344548397)
+            };
+            \addplot[style={fill=orange!40}, error bars/.cd, y dir=both, y explicit] 
+            coordinates {
+                (Build,447.28180871407193) += (0,82.04440029208182) -= (0,82.04440029208182)
+                (Restore,265.9266769886017) += (0,51.98800351475088) -= (0,51.98800351475088)
+            };
+        \legend{Baseline, Anchor, Progressive, BST}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average build and restore times with the 95\% confidence interval over the sampled $.ch$ dataset.}
+    \label{fig:build_restore_ch}
+\end{figure}

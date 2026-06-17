@@ -74,91 +74,91 @@
 \begin{figure*}
     \begin{tikzpicture}[node distance=18mm and 1mm]
 
-        \node[amber] (a1) at (0,0) {1};
-        \coordinate (prev) at (a1.east);
-        \coordinate (arcer) at ($(a1.north) + (0.5cm,0.25cm) $);
-        \foreach \i in {2,...,7} {
-            \node[teal] (a\i) [right=of prev] {\i};
-            \coordinate (prev) at (a\i.east);
-            \draw[dep] (a\i.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
-        }
-        \node[invisible] (dots) [right=of prev] {$\cdots$};
-        \draw[dep] (dots.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
-        \coordinate (prev) at (dots.east);
-      \node[invisible] (dots2) [right=of prev] {$\cdots$};
-        \draw[dep] (dots2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
-      \coordinate (prev) at (dots2.east);
-        \foreach \i in {25,...,31} {
-            \node[teal] (a\i) [right=of prev] {\i};
-            \coordinate (prev) at (a\i.east);
-            %\draw[dep] (a\i.north) arc[start angle=0, end angle=90, x radius=0.5cm, y radius=0.5cm] -- (arcer) arc[start angle=90, end angle=180, x radius=0.5cm, y radius=0.5cm];
-            \draw[dep] (a\i.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
-        }
-
-        \node[font=\small\bfseries, anchor=west] at (0, 0.9) {Anchor};
-        \node[font=\scriptsize, anchor=west] at (0, -0.7)
-            {Every day depends on day~1.};
-
-    \coordinate (start) at (a1);
-    \coordinate (end) at (a31);
-    \draw[gray600!50, line width=0.5pt] ($ (start) + (0,-1.1) $) -- ($ (end) + (0,-1.1) $);
-
-% ════════════════════════════════════════
-%  DIAGRAM 2 — PROGRESSIVE
-% ════════════════════════════════════════
-
-        \node[amber] (p1) [below=of a1] {1};
-        \coordinate (prev) at (p1.east);
-        \coordinate (top) at (p1.north);
-        \coordinate (bottom) at (p1.south);
-      \foreach \i in {2,...,7} {
-        \pgfmathsetmacro{\pct}{int(100 - (\i-1)/30*85)}
-        \node[daynode, fill=pink!\pct!purple, draw=darkrosedraw] (p\i) [right=of prev] {\i};
-          \ifodd \i 
-            \draw [dep] (p\i.south) to[out=-150, in=-30] (bottom); 
-              \coordinate (top) at (p\i.north);
-          \else 
-            \draw [dep] (p\i.north) to[out=150, in=30] (top);
-          \coordinate (bottom) at (p\i.south);
-          \fi
-          \coordinate (prev) at (p\i.east);
-      }
-      \node[invisible] (dots) [right=of prev] {$\cdots$};
-      \draw [dep] (dots.north) to[out=150, in=30] (top);
-      \coordinate (prev) at (dots.east);
-      \node[invisible] (dots2) [right=of prev] {$\cdots$};
-      \coordinate (prev) at (dots2.east);
-      \coordinate (top) at (dots2.north);
-      \coordinate (bottom) at (dots2.south);
-      \foreach \i in {25,...,31} {
-        \pgfmathsetmacro{\pct}{int(100 - (\i-13)/30*85)}
-        \node[daynode, fill=pink!\pct!purple, draw=darkrosedraw] (p\i) [right=of prev] {\i};
-          \ifodd \i 
-            \draw [dep] (p\i.south) to[out=-150, in=-30] (bottom); 
-              \coordinate (top) at (p\i.north);
-          \else 
-            \draw [dep] (p\i.north) to[out=150, in=30] (top);
-          \coordinate (bottom) at (p\i.south);
-          \fi
-          \coordinate (prev) at (p\i.east);
-      }
-
-
-      \node[font=\small\bfseries, anchor=west] at ($(p1) + (0, 0.9)$) {Progressive};
-      \node[font=\scriptsize, anchor=west] at ($(p1) + (0, -0.7)$)
-        {Each day depends on the previous.};
-
-
-    \coordinate (start) at (p1);
-    \coordinate (end) at (p31);
-    \draw[gray600!50, line width=0.5pt] ($ (start) + (0,-1.1) $) -- ($ (end) + (0,-1.1) $);
+%         \node[amber] (a1) at (0,0) {1};
+%         \coordinate (prev) at (a1.east);
+%         \coordinate (arcer) at ($(a1.north) + (0.5cm,0.25cm) $);
+%         \foreach \i in {2,...,7} {
+%             \node[teal] (a\i) [right=of prev] {\i};
+%             \coordinate (prev) at (a\i.east);
+%             \draw[dep] (a\i.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
+%         }
+%         \node[invisible] (dots) [right=of prev] {$\cdots$};
+%         \draw[dep] (dots.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
+%         \coordinate (prev) at (dots.east);
+%       \node[invisible] (dots2) [right=of prev] {$\cdots$};
+%         \draw[dep] (dots2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
+%       \coordinate (prev) at (dots2.east);
+%         \foreach \i in {25,...,31} {
+%             \node[teal] (a\i) [right=of prev] {\i};
+%             \coordinate (prev) at (a\i.east);
+%             %\draw[dep] (a\i.north) arc[start angle=0, end angle=90, x radius=0.5cm, y radius=0.5cm] -- (arcer) arc[start angle=90, end angle=180, x radius=0.5cm, y radius=0.5cm];
+%             \draw[dep] (a\i.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
+%         }
+% 
+%         \node[font=\small\bfseries, anchor=west] at (0, 0.9) {Anchor};
+%         \node[font=\scriptsize, anchor=west] at (0, -0.7)
+%             {Every day depends on day~1.};
+% 
+%     \coordinate (start) at (a1);
+%     \coordinate (end) at (a31);
+%     \draw[gray600!50, line width=0.5pt] ($ (start) + (0,-1.1) $) -- ($ (end) + (0,-1.1) $);
+% 
+% % ════════════════════════════════════════
+% %  DIAGRAM 2 — PROGRESSIVE
+% % ════════════════════════════════════════
+% 
+%         \node[amber] (p1) [below=of a1] {1};
+%         \coordinate (prev) at (p1.east);
+%         \coordinate (top) at (p1.north);
+%         \coordinate (bottom) at (p1.south);
+%       \foreach \i in {2,...,7} {
+%         \pgfmathsetmacro{\pct}{int(100 - (\i-1)/30*85)}
+%         \node[daynode, fill=pink!\pct!purple, draw=darkrosedraw] (p\i) [right=of prev] {\i};
+%           \ifodd \i 
+%             \draw [dep] (p\i.south) to[out=-150, in=-30] (bottom); 
+%               \coordinate (top) at (p\i.north);
+%           \else 
+%             \draw [dep] (p\i.north) to[out=150, in=30] (top);
+%           \coordinate (bottom) at (p\i.south);
+%           \fi
+%           \coordinate (prev) at (p\i.east);
+%       }
+%       \node[invisible] (dots) [right=of prev] {$\cdots$};
+%       \draw [dep] (dots.north) to[out=150, in=30] (top);
+%       \coordinate (prev) at (dots.east);
+%       \node[invisible] (dots2) [right=of prev] {$\cdots$};
+%       \coordinate (prev) at (dots2.east);
+%       \coordinate (top) at (dots2.north);
+%       \coordinate (bottom) at (dots2.south);
+%       \foreach \i in {25,...,31} {
+%         \pgfmathsetmacro{\pct}{int(100 - (\i-13)/30*85)}
+%         \node[daynode, fill=pink!\pct!purple, draw=darkrosedraw] (p\i) [right=of prev] {\i};
+%           \ifodd \i 
+%             \draw [dep] (p\i.south) to[out=-150, in=-30] (bottom); 
+%               \coordinate (top) at (p\i.north);
+%           \else 
+%             \draw [dep] (p\i.north) to[out=150, in=30] (top);
+%           \coordinate (bottom) at (p\i.south);
+%           \fi
+%           \coordinate (prev) at (p\i.east);
+%       }
+% 
+% 
+%       \node[font=\small\bfseries, anchor=west] at ($(p1) + (0, 0.9)$) {Progressive};
+%       \node[font=\scriptsize, anchor=west] at ($(p1) + (0, -0.7)$)
+%         {Each day depends on the previous.};
+% 
+% 
+%     \coordinate (start) at (p1);
+%     \coordinate (end) at (p31);
+%     \draw[gray600!50, line width=0.5pt] ($ (start) + (0,-1.1) $) -- ($ (end) + (0,-1.1) $);
 
     % ════════════════════════════════════════
     %  DIAGRAM 3 — BST DIVISION
     % ════════════════════════════════════════
 
 
-    \node[amber] (b1) [below=of p1] {1};
+    \node[amber] (b1) at (0,0) {1};
     \node[teal] (b2) [right=of b1] {2};
     \node[teal] (b3) [right=of b2] {3};
     \node[purple] (b4) [right=of b3] {4};
@@ -324,12 +324,8 @@
     \node[swatchcoral2] (d7) [right=of d6] {7};
     \node[swatchgray] (d8) [right=of d7] {8};
 
-    \coordinate (start) at (b16);
-    \coordinate (end) at (b31);
-    \draw[gray600!50, line width=0.5pt] ($ (start) + (0,-2.0) $) -- ($ (end) + (0,-2.0) $);
-
     \end{tikzpicture}
+    \caption{Dependency graph of the BST strategy}
+    \label{fig:strategies}
 \end{figure*}
-
-\bigskip
 

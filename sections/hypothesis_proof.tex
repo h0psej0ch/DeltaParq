@@ -1,16 +1,13 @@
 \section{Evaluating The Hypothesis}
 
 \begin{table}
-    \caption{}\label{tab:measurement_differences}
-    \todo[inline]{fill in this table}
+    \caption{Total changing rows in a month in the $.li$ and $.ch$ datasets.}
+    \label{tab:measurement_differences}
     \begin{center}
-        \begin{tabular}[c]{l|l}
-            \hline
-            \multicolumn{1}{c|}{\textbf{}} & 
-            \multicolumn{1}{c}{\textbf{}} \\
-            \hline
-            a & b \\
-            c & d \\
+        \begin{tabular}[c]{|l|r|r|r|} \hline
+            Dataset & Changed Rows & Total Rows & Percentage \\ \hline
+            .li & 5182691 & 32324410 & 16.0\% \\
+            .ch & 280111056 & 1570870201 & 17.8\% \\
             
             \hline
         \end{tabular}
@@ -24,9 +21,6 @@ on day $n$. The set of changed records, which are all records present in
 $D_n$ and not present in $D_{n-1}$ can be denoted as:
 $$\Delta_n = D_{n} \setminus D_{n-1}$$
 Table \ref{tab:measurement_differences} shows the results of this set 
-operation over the span of may 2026 on the dataset of the Liechtenstein dataset. 
-With this it can be determined that the hypothesis is correct, only 30\% of 
-the rows change per measurement of which the RSIG responses make up the large part. 
-The rest of the response types show little change. \todo[inline]{Use the real percentage from the table}
-
+operation over the span of May 2026 on both the Liechtenstein and the Switzerland dataset. 
+These results support the hypothesis, on average only about 17\% of the rows change per measurement.
 

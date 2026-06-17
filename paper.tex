@@ -52,6 +52,10 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{todonotes}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween}
+\usepackage{amsmath}
 
 
 % continuation indent patch http://tex.stackexchange.com/questions/78776/forced-indentation-in-algorithmicx
@@ -172,12 +176,12 @@
 %% article.
 \begin{abstract}
     The OpenINTEL project gathers millions of records from the Domain Name System (DNS) 
-    for the purpose of historical DNS research. Based on the hypothesis that a big part of 
-    the DNS remains unchanged between measurements, this research will create a delta-based
-    storage system. This system would only store the changes compared to a snapshot instead of
-    all daily retrieved data points to improve on storage efficiency. Furthermore, the research 
-    would test different delta-based compression strategies to determine an optimal strategy 
-    taking both storage and analysis efficiency into account.
+    for the purpose of historical DNS research. This research shows that a big part of 
+    the DNS remains unchanged and based on this presents a delta-based storage system, DeltaParq. 
+    The DeltaParq system only stores the changes compared to a snapshot instead of
+    all daily retrieved data points to improve on storage efficiency. The DeltaParq is then 
+    evaluated to show the effects of different delta-based compression strategies on both 
+    storage and analysis efficiency.
 \end{abstract}
 
 %%
@@ -215,13 +219,7 @@
 
 \input{sections/experiments_results.tex}
 
-\input{sections/strategy_diagram.tex}
-
 \input{sections/conclusion}
-
-\input{sections/methodologies.tex}
-
-\input{sections/expected_results.tex}
 
 %%
 %% The next two lines define the bibliography style to be used, and

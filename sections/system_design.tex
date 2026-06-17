@@ -23,8 +23,12 @@ in the configuration.
 Like the current OPENIntel system, DeltaParq stores data using a Hive-style path on an S3 
 bucket. DeltaParq constructs the path using the TLD, date, and S3 bucket that has been set 
 in the configuration.
-$$"s3a://{bucket}/tld={TLD}/year={year:04}/month={month:02}/day={day:02}/"$$
-\todo[inline]{Fix this formatting}
+\[
+\begin{gathered}
+    \texttt{"s3a://\{bucket\}/tld=\{TLD\}/year=\{year:04\}}\\
+    \texttt{/month=\{month:02\}/day=\{day:02\}/"}
+\end{gathered}
+\]
 Using this hierarchy, DeltaParq treats each month as a self-contained unit, this way each delta 
 can only depend on a day in the same month. As the first day of the month is always the start, a 
 part of the configuration called the $month\_config$ is stored in the month's directory. This part of  
@@ -64,7 +68,9 @@ one TXT record changes while another is removed, there is no way of keeping trac
 changed and which one got removed. Not having a unique identifier leaves two options. Either every change is tracked 
 as an addition or subtraction, this would result in two subtractions and one addition being stored in the above example, 
 or the whole set of rows identified by the domain name and type is deemed as updated and thus stored in the delta.
-For the DeltaParq, the latter option of storing the full identified block was chosen. \todo[inline]{explain why!!!}
+For the DeltaParq, the latter option of storing the full identified block was chosen based on the average block size 
+being relatively small. \\ 
+
 A simple subtraction based algorithm, such as Algorithm~\ref{alg:subtract-based-delta} uses the pyspark subtract function 
 to gather all rows in the updated dataframe not present in the removed dataframe. Rows that do not exist in the update 
 but do exist in the base dataframe will not show up in this subtraction, thus a second subtraction needs to be done 
@@ -163,10 +169,11 @@ and filter pushdown. Both the column selection and filter are immediately applie
 pyspark's lazy evaluation would do. This way only the necessary data is retrieved speeding up the retrieval and analysis process.
 
 \subsection{Performance Constraints}
+\label{sec:performance_constraints}
 
 The DeltaParq would benefit significantly from data being physically partitioned by the primary key on write. Both the store 
-and retrieval part of the DeltaParq use various joins and substracts which are wide operations. In the case of spark executing 
-on multiple excutors, the executors need to share information for these wide operations. An executor may have a row that needs to be joined with a row 
+and retrieval part of the DeltaParq use various joins and subtracts which are wide operations. In the case of spark executing 
+on multiple executors, the executors need to share information for these wide operations. An executor may have a row that needs to be joined with a row 
 from the other dataframe present on a different executor causing waiting time on other nodes and extra overhead for sharing the data. 
 If all data is partitioned such that each partition is guaranteed to have all rows for each primary key it has, no data sharing is 
 necessary for these wide operations as each executor now knows they aren't possibly missing data. If this partitioning is done efficiently

@@ -1,4 +1,185 @@
 \section{Experiments \& Results}
 
 
+\subsection{Correctness}
+
+Before evaluating the performance, the correctness of reconstructing dataframes was verified. For correctness, the reconstructed 
+dataframe must be set-equal to the original dataframe:
+\begin{gather*}
+    reconstructed = original \\
+    \Leftrightarrow\quad reconstructed \subseteq original \;\wedge\; original \subseteq reconstructed \\
+    \Leftrightarrow\quad reconstructed \setminus original = \emptyset \;\wedge\; original \setminus reconstructed = \emptyset
+\end{gather*}
+This maps directly to pyspark's $subtract()$ method, where the differences between dataframes 
+are computed. Ensuring the count of the result dataframes is equal to 0 will verify the correctness.
+All versions of delta generation in the DeltaParq system passed these tests across both datasets.
+
+
 \subsection{Strategies}
+
+For the evaluation, three primary strategies have been selected alongside the baseline described in Section~\ref{sec:baseline} 
+This selection is based on the following two competing factors. First, a larger dependency step size, meaning the amount of 
+days between a delta and its dependency, will result in more data being changed and thus less storage being saved. 
+Second, a higher dependency depth, meaning the amount of steps until a full snapshot is reached, will result in a higher 
+retrieval time as more computation needs to be done to apply all the steps. The three selected strategies represent 
+different possible combinations of these factors.
+
+\subsubsection{Anchor}
+
+The anchor strategy uses a singular full snapshot at the first of the month, all other days are a delta based 
+on this full snapshot. This results in a constant dependency depth of 1 for all deltas, but comes with a step size 
+that grows linearly for each day of the month. The anchor strategy tests the case of minimal retrieval time loss 
+at the cost of more storage usage.
+
+\subsubsection{Progressive}
+
+The progressive strategy starts with a full snapshot on the first of the month and consequently builds each delta on the 
+previous day as a base. This results in a constant step size of 1 for all deltas, but comes with a dependency depth that 
+grows linearly for each day of the month. The progressive strategy tests the case of saving the most amount of storage space
+at the cost of higher retrieval times.
+
+\subsubsection{BST}
+
+The binary search tree (BST) strategy is selected as a middle ground of the anchor and progressive strategies.
+When comparing the ratio of the average step size and the average step count, the anchor and progressive strategies 
+are at the extremes of minimizing the step count and minimizing the step size, as can be seen in Table~\ref{tab:ratio}. 
+To approximate a ratio of 1, a strategy based on a BST is used, where day 1 forms the root node and each node $d$ has 
+child nodes $2 \cdot d$ and $2 \cdot d + 1$. The dependency chain for any day of the month can then be obtained by walking 
+the tree from the node to the root. 
+
+% \input{sections/strategy_diagram.tex}
+This however, while getting close to a ratio of 1, can be improved further. A pruned version of the BST is created 
+by splitting the BST into 2 parts, day 1 to 16 are all part of the normal tree while day 17 to 31 are part of a BST 
+of which the root node is node 16%, as illustrated in Figure~\ref{fig:strategies}
+. This optimized BST is the version used in the experiments.
+
+
+\begin{table}
+    \centering \caption{Dependency step size/depth ratio over an average month}
+    \label{tab:ratio}
+    \begin{tabular}{|c|r|r|r|} \hline
+        Strategy    & Step Size & Step Depth & Ratio \\ \hline
+        Anchor      & 447.5     & 29.42      & 15.22 \\
+        Progressive & 29.42     & 447.5      & 0.066 \\
+        BST         & 137.42    & 131.5      & 1.045 \\
+    \hline\end{tabular}
+\end{table}
+
+
+\subsection{Overview}
+
+Table~\ref{tab:overview_li} and Table~\ref{tab:overview_ch} summarize the average storage usage and analysis time for a full month for each tested
+strategy, along with the baseline, across both evaluated datasets. This shows that, as expected, the Progressive strategy manages to save the most space
+over a full month, on average 49.25\% between the 2 datasets compared to the baseline, but that the analysis time for the full month increases significantly. 
+Furthermore, the Anchor strategy doesn't manage to save much space but also doesn't affect the analysis time much. Finally, the BST fits right in between
+saving both a reasonable amount of storage while also taking an average of 65.2\% extra analysis time compared to the baseline. 
+
+\begin{table}
+    \centering \caption{Average storage usage and analysis time per month per strategy for the $.li$ dataset}
+    \label{tab:overview_li}
+    \footnotesize
+    \begin{tabular}{|c|r|r|r|r|} \hline
+        Strategy    & Storage (MB) & \% of Baseline & Analysis (s) & \% of Baseline \\ \hline
+        Baseline    & 1306.93            & 100\%            & 453.21            & 100\%            \\
+        Anchor      & 1335.75            & 102.2\%          & 411.64            & 90.8\%           \\
+        Progressive & 750.88             & 57.5\%           & 777.32            & 171.5\%          \\
+        BST         & 1095.06            & 83.8\%           & 514.93            & 113.6\%          \\
+    \hline\end{tabular}
+\end{table}
+
+\begin{table}
+    \centering \caption{Average storage usage and analysis time per month per strategy for the sampled $.ch$ dataset}
+    \label{tab:overview_ch}
+    \footnotesize
+    \begin{tabular}{|c|r|r|r|r|} \hline
+        Strategy    & Storage (MB) & \% of Baseline & Analysis (s) & \% of Baseline \\ \hline
+        Baseline    & 965.83       & 100\%          & 311.07       & 100\%          \\
+        Anchor      & 835.00       & 86.5\%         & 387.04       & 124.4\%        \\
+        Progressive & 424.46       & 44.0\%         & 690.28       & 221.8\%        \\
+        BST         & 684.23       & 70.8\%         & 494.28       & 158.9\%        \\
+    \hline\end{tabular}
+\end{table}
+
+\subsection{Storage Efficiency}
+
+\subsubsection{Liechtenstein (.li)}
+\input{figures/sizes_li.tex}
+Figure~\ref{fig:storage_sizes_li} shows the average storage size used for each day in the month for each 
+strategy over the $.li$ dataset. The first day immediately shows an interesting result, the only difference between
+the baseline and the first day of each strategy is the schema decomposition, storing the volatile and non-volatile 
+data separately already increases the storage size significantly. Furthermore, both the Anchor and BST strategies 
+use more storage space than the baseline for some days. Almost everything was changed between the day and its base 
+causing the delta to be almost the same size, while the schema decomposition would increase the size further than 
+the baseline. The BST also shows that it gets a new root at day 17, the storage size than follows the same pattern 
+as it had at the start of the month. The Progressive strategy does cut the storage usage almost in half throughout 
+the whole month indicating no major changes in the dataset overall.
+
+\subsubsection{Switzerland (.ch)}
+\input{figures/sizes_ch.tex}
+The storage size evaluation of the sampled $.ch$ dataset (Figure~\ref{fig:storage_sizes_ch}) shows similar patterns as the $.li$ dataset.
+The extra storage size as a result of the schema decomposition is however less significant. Furthermore, the Anchor and BST strategies 
+stay below the baseline indicating that every strategy is able to decrease the storage usage for every day, except the first day of the month,
+on the sampled $.ch$ dataset.
+
+\subsection{Analysis Efficiency}
+
+\subsubsection{Liechtenstein (.li)}
+\input{figures/times_li.tex}
+Figure~\ref{fig:analysis_times_li} shows the average analysis times for each day in the month for each strategy over the $.li$ dataset.
+Consistent with the amount of dependencies growing linearly, the analysis time of the progressive strategy also grows linearly. Furthermore,
+both the baseline and the Anchor strategy stay almost constant, which is as expected since there is no difference in the operations necessary 
+for reconstruction between days. The BST strategy, like in the storage efficiency results, is a middle ground between the Anchor and Progressive 
+strategy. Finally, the first day of the month shows a high peak for all strategies, compared to the baseline the analysis takes way longer, 
+indicating that the schema decomposition with a full snapshot greatly increases the analysis time.
+
+\subsubsection{Switzerland (.ch)}
+\input{figures/times_ch.tex}
+The analysis time evaluation of the sampled $.ch$ dataset (Figure~\ref{fig:analysis_times_ch}) shows the same characteristics as the $.li$ 
+dataset for all strategies. The only significant difference is that the Anchor strategy has taken more analysis time than the baseline, but 
+still stays constant.
+
+\subsection{Feasibility Measurements}
+
+\input{figures/feasability_li.tex}
+\input{figures/feasability_ch.tex}
+
+Figure~\ref{fig:build_restore_li} and Figure~\ref{fig:build_restore_ch} show the build and restore times on average per month 
+for each evaluated strategy and the baseline. The figures show that the build time is slightly increased for all strategies, so 
+for usage in the OPENIntel pipeline, the daily process of storing all data would increase slightly. Restoring the full dataset 
+from the DeltaParq storage however, is shown to be significantly faster compared to the baseline.
+
+\subsection{Discussion}
+
+\subsubsection{Representativeness}
+
+The difference in the outcomes, in particular that the DeltaParq performs worse relative to the baseline on the $.li$ dataset, indicates that 
+the underlying datasets differ in structure. A possible explanation for this is DNS parking. Since Liechtenstein is a microstate with a small 
+population, the DNS records could be flooded by companies and institutions from all across the world claiming domains with their company name 
+or institution name such that the domain cannot be misused. Since all of these parked domains are not changing, but their security signatures 
+have to change, the security signatures are overrepresented in the deltas being created. The security signatures however, are generated such 
+that they have no patterns and are thus almost uncompressable for regular algorithms, like gzip, making them even more overrepresented in the 
+storage sizes being taken up by the deltas.
+
+\subsubsection{Elevated Analysis Time on Day 1}
+
+A consistent peak in analysis time is observed for all strategies on the first day of the month. While present in the sampled $.ch$ dataset
+the baseline does show a similar peak in the $.li$ dataset. Since the only difference between the baseline and the strategies on the first 
+day is the schema decomposition, this may contribute to the higher analysis time, as more data needs to be retrieved, and the data needs 
+to be joined. This however, does not explain why this is not the case for the sampled $.ch$ dataset where all strategies and the baseline 
+have a peak on the first day. Even more so, all other days depend on the first day so the retrieval time of the data from the first day would need to be 
+included in all other days as well. The main hypothesis proposed for this result is a cache somewhere in the pipeline. Between the analysis of
+each day the pyspark cache is full cleared to ensure pyspark does not use any already retrieved data for the analysis. For the rest of the 
+pipeline there is no way to guarantee that no cache is being used, a cache in the S3 storage, Hadoop File System or anywhere in the pipeline 
+could cause the result of the first day to be loaded faster when it is needed after already being loaded once. This could further be true 
+for other actions in the file system, such as retrieving all files necessary to collect which may be cached by the file system.
+
+\subsubsection{Anchoring Interval}
+\label{sec:discussion}
+
+The results of the Anchor strategy show the storage usage growing fast over the first few days, this shows that Anchoring every first day 
+of the month may not be the most efficient version of the Anchor strategy. For example, Anchoring on a weekly basis would reduce the 
+step size to a maximum of 6 days and, based on the graph of the first 7 days of the Anchor strategy, save a significant part of the savings 
+that the Anchor strategy offers. A pitfall of introducing a smaller window for the Anchor strategy is that the full decomposed snapshot is 
+shown to result in significantly higher analysis times for those specific days, having full decomposed snapshots more often would thus 
+result in higher average analysis times.
+
