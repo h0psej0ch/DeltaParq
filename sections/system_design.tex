@@ -2,13 +2,13 @@
 
 \subsection{System Overview}
 
-\subsubsection{Infrastructure}
-For the design of the DeltaParq system, the structure and resources 
-of the current system has been taken into account. The OPENIntel system 
-utilizes a Hadoop file system (HDFS) running on top of an S3 storage cluster\cite{7460220}.
+\hspace{\parindent}\textbf{Infrastructure:} For the design of the DeltaParq system, the structure and resources 
+of the current system has been taken into account. The OpenINTEL system 
+utilizes a Hive partitioned S3 storage cluster~\cite{7460220}.
 Furthermore, Apache Spark, with its Python derivative psypark, is used for 
-querying and analyzing the dataset. While the DeltaParq system has been 
-designed for the OPENIntel project, it has also been designed with 
+querying and analyzing the dataset. Consequently the DeltaParq is based on pyspark 
+and supports storage retrieval from an S3 cluster. However, while the DeltaParq system 
+has been designed for the OpenINTEL project, it has also been designed with 
 generalizability in mind. The system uses a configuration file to set 
 which columns are part of the primary key(PK) and which columns are volatile, 
 this way other datasets could utilize the DeltaParq as well. All join operations 
@@ -18,9 +18,7 @@ file systems are easy to integrate and can after integration easily be switched
 in the configuration.
 
 
-\subsubsection{Self-Describing Storage}
-
-Like the current OPENIntel system, DeltaParq stores data using a Hive-style path on an S3 
+\textbf{Self-Describing Storage:} Like the current OpenINTEL system, DeltaParq stores data using a Hive-style path on an S3 
 bucket. DeltaParq constructs the path using the TLD, date, and S3 bucket that has been set 
 in the configuration.
 \[
@@ -36,17 +34,13 @@ the config describes the primary key, volatile columns, and strategy. This makes
 self-describing and ensures each dataframe can be correctly reconstructed without relying on the 
 current system's configuration.
 
-\subsubsection{Storage Strategies}
-
-Since a delta will always be based on a single base dataframe, a storage strategy which determines 
+\textbf{Storage Strategies:} Since a delta will always be based on a single base dataframe, a storage strategy which determines 
 which delta is based on which base, a strategy can be encoded as a function $strategy: \mathbb{Z} \rightarrow 
 \mathbb{Z}$. Furthermore, a day is stored as a full snapshot if $strategy(d) = d$.
 
 \subsection{Putting Data into the DeltaParq}
 
-\subsubsection{Schema Decomposition}
-
-As mentioned in the problem statement, the OPENIntel dataset 
+\textbf{Schema Decomposition:} As mentioned in the problem statement, the OpenINTEL dataset 
 contains both volatile and non-volatile data. As the volatile data is almost guaranteed 
 to change between each measurement, these columns need to be removed from the non-volatile 
 data using a schema decomposition. Using pyspark, the decomposition can be easily done by 
@@ -57,10 +51,8 @@ without the columns marked as volatile, but including the primary key, are selec
 The resulting volatile dataframe can immediately be written to storage, while non-volatile 
 dataframe needs to be processed using delta generation to be stored in the DeltaParq.
 
-\subsubsection{Delta Generation}
-
-The concept of delta generation is based on filtering out all the rows that are different 
-in the updated version compared to the base version. The OPENIntel dataset, and DNS records 
+\textbf{Delta Generation:} The concept of delta generation is based on filtering out all the rows that are different 
+in the updated version compared to the base version. The OpenINTEL dataset, and DNS records 
 in general, have an inherent flaw making this difficult: DNS records do not have a unique identifier.
 The identifiers for a DNS record is its domain name and record type, but this combination does not have to be
 unique. For example, the domain name example.com could return multiple TXT records, if between measurements
@@ -91,7 +83,7 @@ then results in all keys necessary for the delta.
 \end{algorithm}
 
 While the subtract-based delta generation worked, it is not efficient. The main bottleneck of the 
-OPENIntel system is the retrieval from storage. If both the dataframes do not fit in the allocated RAM,
+OpenINTEL system is the retrieval from storage. If both the dataframes do not fit in the allocated RAM,
 during operations, they need to be retrieved multiple times for the subtractions after which the update 
 dataframe is needed once more for the join with the delta keys. To counter these retrievals, a hash-based 
 delta generation algorithm, Algorithm~\ref{alg:hash-based-delta}, has been designed. The hash-based delta
@@ -132,9 +124,7 @@ Retrieving a dataframe for a given day from the DeltaParq requires exploring the
 dependency chain, reconstruct all dataframes in the dependency chain, and finally join 
 the dataframe with the volatile data of the day that is to be retrieved.
 
-\subsubsection{Dependency Resolution}
-
-Given a delta strategy function $strategy: \mathbb{Z} \rightarrow \mathbb{Z}$ that maps each
+\textbf{Dependency Resolution:} Given a delta strategy function $strategy: \mathbb{Z} \rightarrow \mathbb{Z}$ that maps each
 day to the day it depends on, the dependency chain for a given day can be resolved for a day by 
 walking the chain until a snapshot, identified by $strategy(d) = d$, is reached. If multiple 
 days are requested, the dependency chain is walked for each day. If at any point a dependency is 
@@ -144,9 +134,7 @@ dependency precedes itself in the chain:
 $$\forall d \in chain,\quad strategy(d) = d \;\lor\; strategy(d) \in chain_{[:i_d]}$$
 where $chain_{[:i_d]}$ denotes the chain up until $d$.
 
-\subsubsection{Delta Reconstruction}
-
-Using the resolved dependency chain, the full dataframe for each day in the chain can be reconstructed 
+\textbf{Delta Reconstruction:} Using the resolved dependency chain, the full dataframe for each day in the chain can be reconstructed 
 which will result in all the requested days being reconstructed as well. For a snapshot day the data is read 
 directly from storage, while for a delta day the delta is applied to a previously reconstructed dataframe. 
 The application of a delta to a base requires filtering out all primary keys in the delta from the base as 
@@ -160,9 +148,7 @@ from in the update cannot be present in the delta dataframe. Since the volatile 
 its volatile columns for each measurement, this can be used to filter out all the completely removed blocks that are still 
 present in the applied delta as these would not be present in the volatile dataframe.
 
-\subsubsection{Public Interface}
-
-The DeltaParq offers both a $get()$ and $get\_list()$ interface for retrieving data. With $get\_list()$ the retrieval 
+\textbf{Public Interface:} The DeltaParq offers both a $get()$ and $get\_list()$ interface for retrieving data. With $get\_list()$ the retrieval 
 of the dataframes is structured such that any dataframes that would be retrieved multiple times in the different dependency 
 chain of each requested day is only retrieved once. Furthermore, the retrieval methods of the DeltaParq offer a column selection 
 and filter pushdown. Both the column selection and filter are immediately applied to the dataframes retrieved from storage, like 

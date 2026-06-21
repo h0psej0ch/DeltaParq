@@ -1,9 +1,10 @@
 \section{Conclusions and Future Work}
 
+\subsection{Conclusions}
 This research investigated to which extent the storage and analysis efficiency can be improved by transforming a daily
 historical DNS record database into a delta-based storage system. The results confirmed the underlying hypothesis that 
 a majority of the collected DNS records remain unchanged between measurements. The introduced DeltaParq, a schema-aware 
-delta-based storage prototype build for the OPENIntel project, showed that this can be used to reduce storage usage.
+delta-based storage prototype build for the OpenINTEL project, showed that this can be used to reduce storage usage.
 An evaluation over multiple datasets showed that up to about 49.25\% of storage space can be saved using the 
 Progressive strategy, which also comes with a significantly longer analysis time. Other evaluated strategies, 
 such as the BST strategy, show that saving a substantial amount of storage space can be done with less impact 
@@ -24,8 +25,8 @@ the Progressive strategy, significantly lower. Furthermore, it may make more fre
 more viable as the increased analysis time identified in~\ref{sec:discussion} would have less of an impact.
 
 Secondly, this research evaluated the DeltaParq prototype on only 2 datasets based on a single underlying structure. Evaluating the 
-schema-aware delta-based storage systems over more datasets, both within the same OPENIntel structure, and other domains with similar 
-volatile and non-volatile data columns, would strengthen the conclusions and the generalizability beyond the OPENIntel system.
+schema-aware delta-based storage systems over more datasets, both within the same OpenINTEL structure, and other domains with similar 
+volatile and non-volatile data columns, would strengthen the conclusions and the generalizability beyond the OpenINTEL system.
 
 Finally, with more data and more research, models could be created for optimizing strategy selection for each underlying dataset. 
 Creating a model both for mapping a combination of the properties of a specific strategy and the structure of the underlying dataset, 

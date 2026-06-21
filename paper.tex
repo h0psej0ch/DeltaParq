@@ -56,6 +56,8 @@
 \pgfplotsset{compat=1.18}
 \usepgfplotslibrary{fillbetween}
 \usepackage{amsmath}
+\usepackage{appendix}
+\usepackage{float}
 
 
 % continuation indent patch http://tex.stackexchange.com/questions/78776/forced-indentation-in-algorithmicx
@@ -175,19 +177,17 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-    The OpenINTEL project gathers millions of records from the Domain Name System (DNS) 
-    for the purpose of historical DNS research. This research shows that a big part of 
-    the DNS remains unchanged and based on this presents a delta-based storage system, DeltaParq. 
-    The DeltaParq system only stores the changes compared to a snapshot instead of
-    all daily retrieved data points to improve on storage efficiency. The DeltaParq is then 
-    evaluated to show the effects of different delta-based compression strategies on both 
-    storage and analysis efficiency.
+    This paper demonstrates that a large part of the DNS remains unchanged on a daily basis.
+    Furthermore, this paper introduces DeltaParq, a schema-aware delta-based generalized storage 
+    system capable of exploiting repeated storage of identical data to store only what is necessary.
+    An evaluation of the DeltaParq protype, over daily historical DNS data, is used to 
+    demonstrate the impact of using delta-based compression on both storage and analysis efficiency.
 \end{abstract}
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{DNS, Delta-Compression, Big Data}
+\keywords{Domain Name System (DNS), Delta-Compression, Schema decomposition, Storage efficiency, Temporal data storage}
 
 \settopmatter{printacmref=false}
 
@@ -227,7 +227,16 @@
 \bibliographystyle{ACM-Reference-Format}
 
 \bibliography{paper.bib}
-
+\begin{appendix}
+\begin{minipage}{\columnwidth}
+\section*{Appendix}
+\section{AI Statement}
+During the preparation of this work the author used Claude Sonnet 4.6 in order to
+efficiently research documentation and enhance the writing of this paper. After 
+using this tool, the author reviewed and edited the content as needed
+and takes full responsibility for the content of the work.
+\end{minipage}
+\end{appendix}
 \end{document}
 \endinput
 %%

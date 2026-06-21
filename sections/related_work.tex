@@ -9,9 +9,9 @@ The program closest to meeting the needs of the OpenINTEL storage system is
 Apache Hudi\footnote{\url{https://hudi.apache.org/}}. Hudi is a storage management 
 system built on top of database formats like Parquet. Hudi adds 
 log files onto these files that describe changes, these can be seen 
-as deltas to the original Parquet file. However, Hudi is limited by its retrieval and 
-storage capabilities. Hudi was created as an efficient way to apply edits to a database 
-write-only database. Because of this Hudi only has functions to retrieve the current status 
+as deltas to the original Parquet file. However, it is limited by its retrieval and 
+storage capabilities. Hudi was created as an efficient way to apply edits to a 
+write-only database. Because of this it only has functions to retrieve the current status 
 which applies all delta logs at once. Hudi lacks the feature of constructing the table for 
 any given snapshot. Furthermore, a build in feature that cannot be removed from Hudi is its 
 Compaction feature. Hudi will regularly update the base snapshot which merges the first few 
@@ -33,35 +33,27 @@ done manually where each Parquet for each day would be retrieved and combined.\\
 Furthermore, none of these current systems are able to handle formats with partially 
 volatile columns that update every measurement.\\
 
-For the delta storage system proposed for the OpenINTEL system, the research gap lies in providing 
-a system that is able to reconstruct any timestamp without lost data while also being able 
-to store just the deltas instead of full snapshots of non-volatile columns combined with volatile
-columns. 
-
 \subsection{DNS Measuring Storage Systems}
 
 Next to the OpenINTEL project which this research will build on, several DNS 
 history providers exist. The most prominent one is the ActiveDNS 
-project\footnote{\url{https://activednsproject.org/}}. Like OpenINTEL, ActiveDNS stores 
+project\footnote{\url{https://activednsproject.org/}}. Similar to OpenINTEL, ActiveDNS stores 
 daily DNS records. The ActiveDNS project collects data from multiple vantage points, 
 this results in possible duplicate data which is deduplicated in the storage module 
-of the system\cite{DBLP:conf/raid/KountourasKLCND16}. However, like OpenINTEL, 
+of the system~\cite{DBLP:conf/raid/KountourasKLCND16}. However, like OpenINTEL, 
 ActiveDNS does not have any deduplication of data between separate days. 
 
 Furthermore, commercial providers exist such as the Farsight 
 DNSDB\footnote{\url{https://www.domaintools.com/}}, WhoisXMLAPIs DNS 
-Database\footnote{\url{https://dns-history.whoisxmlapi.com/database}}, and SpamHaus'
+Database\footnote{\url{https://dns-history.whoisxmlapi.com/database}}, and SpamHaus's
 passive DNS database\footnote{\url{https://www.spamhaus.com/data-access/passive-dns-api/}}. 
-All of these providers do not provide any public documentation on their storage system.
-
-For storage systems used in DNS measuring systems, the research gap lies in that there 
-currently does not exist an available DNS storage system that uses delta encoding to 
-reduce redundancy.
+All of these providers do not provide any public documentation on their storage system, thus 
+it cannot be concluded if any type of delta-compression is used to efficiently store their data.
 
 \subsection{Delta Strategies}
 
-Delta storage is used in many video codecs such as the MPEG video encoding 
-standards\cite{isoiec11172}. The MPEG codecs store frames of a video as a combination 
+Delta storage is used in many video codecs used to efficiently store video data, such as the MPEG video encoding 
+standards~\cite{isoiec11172}. The MPEG codecs store frames of a video as a combination 
 of base images, forward predicted images, and bi-directionally predicted images. The 
 bi-directionally predicted images allow for even smaller deltas as the similarities to both 
 the previous and the next data point can be used. Under the hypothesis that DNS records 
@@ -72,18 +64,12 @@ next day. This would cause more temporary storage overhead and adds complexity t
 storage system which is unfavorable.
 
 Furthermore, different types of files have been tested with several strategies to reduce 
-dependencies on other snapshots while retaining storage efficiency\cite{10.5555/2667702.2667705}. 
-This work comes close to the objective set out in RO3, however it does not take into account 
-the vast amount of the data being stored by the OpenINTEL project and the significant time loss on 
-I/O operation on the hard disks for retrieval of the resulting data that this creates.
+dependencies on other snapshots while retaining storage efficiency~\cite{10.5555/2667702.2667705}. 
+This work is similar in nature since it touches on the effects of using delta-compression, however it does not take into account 
+the vast amount of the data being stored by the OpenINTEL project and the significant time loss of 
+I/O operations on the hard disks for retrieval of the resulting data that this creates.
 
-LoopDelta however, does identify the extra I/O operations necessary for reconstruction of 
-delta files as a bottleneck in delta-based storage\cite{10.1145/3721485}. But, like the video 
+LoopDelta does identify the extra I/O operations necessary for reconstruction of 
+delta files as a bottleneck in delta-based storage~\cite{10.1145/3721485}. But, similar to the video 
 codecs, LoopDelta relies partially on backwards deltas which require the next day to be known 
 in the OpenINTEL system for the compression optimization.
-
-For the delta strategies that can be used on the OpenINTEL dataset, the research gap lies 
-in that some of the current best systems rely on access to all data at once which is not 
-possible for the continuous OpenINTEL system. Furthermore, the current systems do not yet appear
-to address the specific strains that the vast amount of data being created per day 
-has on the hardware that stores it all.

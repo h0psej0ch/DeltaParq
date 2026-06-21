@@ -1,8 +1,7 @@
 \section{Introduction}
 
-Since its introduction in 1983 as a small name system on the ARPANET, 
-the Domain Name System (DNS) has grown to 392.5 million registrations 
-across all top-level domains (TLDs)~\cite{dnib_q1_2026}. 
+Since its introduction in 1983 as a small name system on the ARPANET, the Domain Name System (DNS) 
+has grown to 392.5 million registrations across all top-level domains (TLDs)~\cite{dnib_q1_2026}. 
 The OpenINTEL project\footnote{\url{https://openintel.nl/}} actively records daily historical data 
 of most TLDs. This historical data has been essential for research in many domains 
 such as cybersecurity~\cite{Sommese_2024} and infrastructure resilience~\cite{10.1145/3517745.3561458}.
@@ -12,19 +11,19 @@ Parquet\footnote{\url{https://parquet.apache.org/}} columnar storage format for 
 This research is motivated by the hypothesis that a majority of the collected DNS records 
 remain unchanged between measurements. Under this hypothesis a majority of the data stored 
 every day by the OpenINTEL project is a duplicate of the previous day. Instead of storing 
-all data every day, using a delta-based storage solution, which only stores the records 
-that changed compared to a previous snapshot, could substantially reduce the storage usage. 
+all data every day, storing a delta, which consists of only the records that changed between measurements, 
+could substantially reduce the storage usage. 
 Furthermore, as the size of the stored records decreases, less data needs to be retrieved 
 from storage which could improve the analysis efficiency. The downside of using delta-based 
 storage however, is that reconstructing a data point requires reconstructing the full 
 dependency chain, which may decrease the analysis efficiency.
 
-Designing such a delta-based storage system presents several non-trivial challenges.\\
+Designing such a delta-based storage system presents several non-trivial challenges.
 Since the data is stored in a format where row-group coherence matters, where it is important 
-which row and column a value belongs to, it is not possible to store just the new values of each 
+which row and column a value belongs to, it is not possible to store only the new values of each 
 column as that results in not knowing which rows these values might belong to. 
 This constrains the system to copy either the full column or the full row into the delta. 
-A full-column delta however is impractical for this dataset: a single row receiving a new value would 
+A full-column delta, however, is impractical for this dataset as a single row receiving a new value would 
 require storing all millions of rows in the delta column, yielding no storage benefit. A full-row 
 delta follows as the natural choice, but this introduces further problems, namely volatile columns.
 The OpenINTEL database contains several volatile columns that change almost every 
@@ -40,7 +39,7 @@ Finally, multiple strategies can be used for a delta-based storage system. For e
 progressive deltas store deltas based on the previous measurement while snapshot deltas 
 would store all deltas based on a single snapshot. These different strategies present tradeoffs
 between storage efficiency and reconstruction cost. The exact causes of these tradeoffs lie in 
-the characteristics of the underlying data of the OPENIntel system. \\ 
+the characteristics of the underlying data of the OpenINTEL system. \\ 
 
 The main focus of this research is the impact of using a delta-based storage system, and its different 
 strategy designs on storage and analysis efficiency. This leads to the following research question:
@@ -51,10 +50,10 @@ strategy designs on storage and analysis efficiency. This leads to the following
 record database into a delta-based storage system?}}
 \end{center}
 
-To answer the research question, this paper will first investigate the state of the art in delta-based systems 
+This paper will first investigate the state of the art in delta-based systems 
 to identify the gaps that motivate this work. Furthermore, the paper will evaluate the correctness of the underlying 
 hypothesis. Based on the explored system constrains and research gaps, DeltaParq is introduced, a schema-aware delta-based 
-storage prototype built for the OPENIntel project\footnote{\url{https://github.com/h0psej0ch/DeltaParq}}. An evaluation framework will be presented that assesses both storage 
+storage prototype built for the OpenINTEL project\footnote{\url{https://github.com/h0psej0ch/DeltaParq}}. An evaluation framework will be presented that assesses both storage 
 and analysis efficiency. With this framework multiple delta strategies will be assessed of which the results will be presented.
 Finally, using the results, conclusions are drawn on the practical viability of a delta-based storage system for a daily DNS 
 record database.

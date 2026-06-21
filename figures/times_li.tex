@@ -6,13 +6,15 @@
                 height=6cm,
                 xlabel={Day of month},
                 ylabel={Analysis time (s)},
-                xmin=1, xmax=31,
+                xmin=0, xmax=32,
+                ymin=0,
                 xtick distance=2,
+                xtick={1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31},
                 legend style={
-                    at={(0.5,-0.25)},
+                    at={(0.5,0.13)},
                     anchor=north,
                     legend columns=4,
-                    font=\small
+                    font=\footnotesize
                 },
                 grid=major,
                 grid style={dashed, gray!30},
@@ -137,7 +139,7 @@
         \end{tikzpicture}
     \end{center}
     \caption{
-        Analysis time per day of the month on the $.li$ dataset, averaged across all months of 2025 that contain that day
+        Analysis time \textbf{per day of the month} on the $.li$ dataset, averaged across all months of 2025 that contain that day
         Shaded bands represent the 95\% confidence interval, where not visible, the interval is narrower than the line width.
     }
     \label{fig:analysis_times_li}

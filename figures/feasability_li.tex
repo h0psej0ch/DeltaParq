@@ -1,8 +1,10 @@
 \begin{figure}
+    \begin{center}
     \begin{tikzpicture}
         \begin{axis}[
             ylabel=Time (s),
-            height = 8cm,
+            height = 6cm,
+            width = 8cm,
             major x tick style = transparent,
             ybar=2*\pgflinewidth,
             bar width=20pt,
@@ -13,7 +15,6 @@
             enlarge x limits=0.50,
             ymin=0,
             legend cell align=left,
-            legend columns=2,
         ]
             \addplot[style={fill=gray!40}, error bars/.cd, y dir=both, y explicit] 
             coordinates {
@@ -38,6 +39,7 @@
         \legend{Baseline, Anchor, Progressive, BST}
         \end{axis}
     \end{tikzpicture}
-    \caption{Average build and restore times with the 95\% confidence interval over the $.li$ dataset.}
+    \caption{Average build and restore times \textbf{per month} with the 95\% confidence interval over the $.li$ dataset.}
     \label{fig:build_restore_li}
+    \end{center}
 \end{figure}
