@@ -49,6 +49,7 @@
 \usepackage{pgfgantt}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, bending, positioning, calc}
+\usetikzlibrary{patterns.meta}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{todonotes}
@@ -144,7 +145,7 @@
 %%
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
-\title{DeltaParq -  Using Delta Compression for Efficient Storage of OpenINTELs Historical DNS Records}
+\title{DeltaParq -  Using Delta Compression for Efficient Storage of OpenINTEL's Historical DNS Records}
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -177,11 +178,14 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-    This paper demonstrates that a large part of the DNS remains unchanged on a daily basis.
-    Furthermore, this paper introduces DeltaParq, a schema-aware delta-based generalized storage 
-    system capable of exploiting repeated storage of identical data to store only what is necessary.
-    An evaluation of the DeltaParq protype, over daily historical DNS data, is used to 
-    demonstrate the impact of using delta-based compression on both storage and analysis efficiency.
+    This paper introduces DeltaParq, a schema-aware delta-based generalized storage 
+    system capable of exploiting repeated storage of identical data to store only what has changed.
+    An evaluation of the DeltaParq prototype over daily historical DNS data, which is shown to contain 
+    a majority of duplicate temporal data, is used to quantify the impact of using delta-based 
+    compression on both storage and analysis efficiency. The results show that an aggressive delta 
+    strategy can reduce storage on average by 49.25\% of storage space at the cost of a 98.65\% increase 
+    on the analysis time. Less aggressive strategies show that a balance between the storage 
+    reduction and the analysis time increase can be achieved.
 \end{abstract}
 
 %%
@@ -219,7 +223,11 @@
 
 \input{sections/experiments_results.tex}
 
-\input{sections/conclusion}
+\input{sections/conclusion.tex}
+
+\input{sections/acknowledgements.tex}
+
+\pagebreak
 
 %%
 %% The next two lines define the bibliography style to be used, and
@@ -227,15 +235,12 @@
 \bibliographystyle{ACM-Reference-Format}
 
 \bibliography{paper.bib}
+\onecolumn
 \begin{appendix}
-\begin{minipage}{\columnwidth}
 \section*{Appendix}
-\section{AI Statement}
-During the preparation of this work the author used Claude Sonnet 4.6 in order to
-efficiently research documentation and enhance the writing of this paper. After 
-using this tool, the author reviewed and edited the content as needed
-and takes full responsibility for the content of the work.
-\end{minipage}
+\section{Strategy Diagram}
+\label{sec:strat_diag}
+\input{figures/strategy_diagram.tex}
 \end{appendix}
 \end{document}
 \endinput

@@ -1,21 +1,16 @@
+\definecolor{gray50}{RGB}{241,239,232}      \definecolor{gray600}{RGB}{95,94,90}
+% Row 1 — light fills, dark borders
+\definecolor{bluefill}{RGB}{205,225,245}    \definecolor{bluedraw}{RGB}{60,100,150}
+\definecolor{mintfill}{RGB}{195,235,215}    \definecolor{mintdraw}{RGB}{30,120,80}
+\definecolor{orangefill}{RGB}{250,210,180}  \definecolor{orangedraw}{RGB}{170,80,30}
+\definecolor{pinkfill}{RGB}{248,215,225}    \definecolor{pinkdraw}{RGB}{160,70,110}
+ 
+% Row 2 — same hues, medium fills (clearly deeper than row 1)
+\definecolor{blue2fill}{RGB}{155,195,230}   \definecolor{blue2draw}{RGB}{40,75,120}
+\definecolor{mint2fill}{RGB}{120,200,170}   \definecolor{mint2draw}{RGB}{20,90,60}
+\definecolor{orange2fill}{RGB}{245,165,125} \definecolor{orange2draw}{RGB}{140,55,15}
+\definecolor{pink2fill}{RGB}{235,175,200}   \definecolor{pink2draw}{RGB}{130,45,85}
 
-\definecolor{amber50}{RGB}{250,238,218}          \definecolor{amber600}{RGB}{133,79,11}
-\definecolor{teal50}{RGB}{225,245,238}           \definecolor{teal600}{RGB}{15,110,86}
-\definecolor{purple50}{RGB}{238,237,254}         \definecolor{purple600}{RGB}{83,74,183}
-\definecolor{coral50}{RGB}{250,236,231}          \definecolor{coral600}{RGB}{153,60,29}
-\definecolor{gray50}{RGB}{241,239,232}           \definecolor{gray600}{RGB}{95,94,90}
-\definecolor{amber2fill}{RGB}{240,210,155}       \definecolor{amber2draw}{RGB}{110,60,5}
-\definecolor{teal2fill}{RGB}{185,228,210}        \definecolor{teal2draw}{RGB}{8,80,58}
-\definecolor{purple2fill}{RGB}{210,208,245}      \definecolor{purple2draw}{RGB}{55,45,150}
-\definecolor{coral2fill}{RGB}{240,200,185}       \definecolor{coral2draw}{RGB}{130,40,15}
-\definecolor{gray2fill}{RGB}{210,207,198}        \definecolor{gray2draw}{RGB}{65,63,58}
-\definecolor{darkslatefill}{RGB}{226, 232, 240}  \definecolor{darkslatedraw}{RGB}{74, 85, 104}
-\definecolor{darktealfill}{RGB}{230, 255, 250}   \definecolor{darktealdraw}{RGB}{35, 78, 82}
-\definecolor{darkplumfill}{RGB}{235, 229, 247}   \definecolor{darkplumdraw}{RGB}{85, 60, 154}
-\definecolor{darksiennafill}{RGB}{254, 232, 214} \definecolor{darksiennadraw}{RGB}{123, 52, 30}
-\definecolor{darkolivefill}{RGB}{237, 242, 194}  \definecolor{darkolivedraw}{RGB}{61, 74, 26}
-\definecolor{darkrosefill}{RGB}{253, 232, 240}   \definecolor{darkrosedraw}{RGB}{151, 38, 109}
-\definecolor{darknavyfill}{RGB}{235, 244, 255}   \definecolor{darknavydraw}{RGB}{42, 67, 101}    
 
 \tikzset{
   daynode/.style = {
@@ -24,61 +19,48 @@
     inner sep=1pt, font=\tiny,
     draw, line width=0.4pt
   },
-  amber/.style      = {daynode, fill=amber50,  draw=amber600},
-  teal/.style       = {daynode, fill=teal50,   draw=teal600},
-  purple/.style     = {daynode, fill=purple50, draw=purple600},
-  coral/.style      = {daynode, fill=coral50,  draw=coral600},
-  gray/.style       = {daynode, fill=gray50,   draw=gray600},
-  amber2/.style     = {daynode, fill=amber2fill,  draw=amber2draw},
-  teal2/.style      = {daynode, fill=teal2fill,   draw=teal2draw},
-  purple2/.style    = {daynode, fill=purple2fill, draw=purple2draw},
-  coral2/.style     = {daynode, fill=coral2fill,  draw=coral2draw},
-  darkslate/.style  = {daynode, fill=darkslatefill, draw=darkslatedraw},
-  darkteal/.style   = {daynode, fill=darktealfill, draw=darktealdraw},
-  darkplum/.style   = {daynode, fill=darkplumfill, draw=darkplumdraw},
-  darksienna/.style = {daynode, fill=darksiennafill, draw=darksiennadraw},
-  darkolive/.style  = {daynode, fill=darkolivefill, draw=darkolivedraw},
-  darkrose/.style   = {daynode, fill=darkrosefill, draw=darkrosedraw},
-  darknavy/.style   = {daynode, fill=darknavyfill, draw=darknavydraw},
-  invisible/.style  = {daynode, fill=none,     draw=none},
-  dep/.style        = {-{Stealth[length=2.5pt,width=2pt]}, line width=0.8pt},
-  depteal/.style    = {dep, draw=teal600},
-  deppurple/.style  = {dep, draw=purple600},
-  depcoral/.style   = {dep, draw=coral600},
-  depgray/.style    = {dep, draw=gray600},
-  depteal2/.style   = {dep, draw=teal2draw},
-  deppurple2/.style = {dep, draw=purple2draw},
-  depcoral2/.style  = {dep, draw=coral2draw},
-  swatchamber/.style   = {amber, minimum width=6mm, minimum height=4mm},
-  swatchteal/.style    = {teal, minimum width=6mm, minimum height=4mm},
-  swatchpurple/.style  = {purple, minimum width=6mm, minimum height=4mm},
-  swatchcoral/.style   = {coral, minimum width=6mm, minimum height=4mm},
+  gray/.style          = {daynode, fill=gray50,   draw=gray600},
+  invisible/.style     = {daynode, fill=none,     draw=none},
+  blue/.style          = {daynode, fill=bluefill,    draw=bluedraw},
+  mint/.style          = {daynode, fill=mintfill,    draw=mintdraw},
+  orange/.style        = {daynode, fill=orangefill,  draw=orangedraw},
+  pink/.style          = {daynode, fill=pinkfill,    draw=pinkdraw},
+  blue2/.style         = {daynode, fill=blue2fill,   draw=blue2draw},
+  mint2/.style         = {daynode, fill=mint2fill,   draw=mint2draw},
+  orange2/.style       = {daynode, fill=orange2fill, draw=orange2draw},
+  pink2/.style         = {daynode, fill=pink2fill,   draw=pink2draw},
+  dep/.style           = {-{Stealth[length=2.5pt,width=2pt]}, line width=0.8pt},
+  depgray/.style       = {dep, draw=gray600},
+  depblue/.style       = {dep, draw=bluedraw},
+  depmint/.style       = {dep, draw=mintdraw},
+  deporange/.style     = {dep, draw=orangedraw},
+  deppink/.style       = {dep, draw=pinkdraw},
+  depblue2/.style      = {dep, draw=blue2draw},
+  depmint2/.style      = {dep, draw=mint2draw},
+  deporange2/.style    = {dep, draw=orange2draw},
+  deppink2/.style      = {dep, draw=pink2draw},
   swatchgray/.style    = {gray, minimum width=6mm, minimum height=4mm},
-  swatchamber2/.style  = {amber2, minimum width=6mm, minimum height=4mm},
-  swatchteal2/.style   = {teal2, minimum width=6mm, minimum height=4mm},
-  swatchpurple2/.style = {purple2, minimum width=6mm, minimum height=4mm},
-  swatchcoral2/.style  = {coral2, minimum width=6mm, minimum height=4mm},
-  swatchgray2/.style   = {gray2, minimum width=6mm, minimum height=4mm},
-  swatchdarkslate/.style   = {darkslate, minimum width=6mm, minimum height=4mm},
-  swatchdarkteal/.style    = {darkteal, minimum width=6mm, minimum height=4mm},
-  swatchdarkplum/.style  = {darkplum, minimum width=6mm, minimum height=4mm},
-  swatchdarksienna/.style   = {darksienna, minimum width=6mm, minimum height=4mm},
-  swatchdarkolive/.style    = {darkolive, minimum width=6mm, minimum height=4mm},
-  swatchdarkrose/.style    = {darkrose, minimum width=6mm, minimum height=4mm},
-  swatchdarknavy/.style    = {darknavy, minimum width=6mm, minimum height=4mm},
+  swatchblue/.style    = {blue, minimum width=6mm, minimum height=4mm},
+  swatchmint/.style    = {mint, minimum width=6mm, minimum height=4mm},
+  swatchorange/.style  = {orange, minimum width=6mm, minimum height=4mm},
+  swatchpink/.style    = {pink, minimum width=6mm, minimum height=4mm},
+  swatchblue2/.style   = {blue2, minimum width=6mm, minimum height=4mm},
+  swatchmint2/.style   = {mint2, minimum width=6mm, minimum height=4mm},
+  swatchorange2/.style = {orange2, minimum width=6mm, minimum height=4mm},
+  swatchpink2/.style   = {pink2, minimum width=6mm, minimum height=4mm}
 }
 
 % ════════════════════════════════════════
 %  DIAGRAM 1 — ANCHOR
 % ════════════════════════════════════════
-\begin{figure*}
+\begin{figure*}[h]
     \begin{tikzpicture}[node distance=18mm and 1mm]
 
-        \node[amber] (a1) at (0,0) {1};
+        \node[orange] (a1) at (0,0) {1};
          \coordinate (prev) at (a1.east);
          \coordinate (arcer) at ($(a1.north) + (0.5cm,0.25cm) $);
          \foreach \i in {2,...,7} {
-             \node[teal] (a\i) [right=of prev] {\i};
+             \node[mint] (a\i) [right=of prev] {\i};
              \coordinate (prev) at (a\i.east);
              \draw[dep] (a\i.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
          }
@@ -89,9 +71,8 @@
          \draw[dep] (dots2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
        \coordinate (prev) at (dots2.east);
          \foreach \i in {25,...,31} {
-             \node[teal] (a\i) [right=of prev] {\i};
+             \node[mint] (a\i) [right=of prev] {\i};
              \coordinate (prev) at (a\i.east);
-             %\draw[dep] (a\i.north) arc[start angle=0, end angle=90, x radius=0.5cm, y radius=0.5cm] -- (arcer) arc[start angle=90, end angle=180, x radius=0.5cm, y radius=0.5cm];
              \draw[dep] (a\i.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.85cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.85cm];
          }
  
@@ -107,13 +88,13 @@
  %  DIAGRAM 2 — PROGRESSIVE
  % ════════════════════════════════════════
  
-         \node[amber] (p1) [below=of a1] {1};
+         \node[orange] (p1) [below=of a1] {1};
          \coordinate (prev) at (p1.east);
          \coordinate (top) at (p1.north);
          \coordinate (bottom) at (p1.south);
        \foreach \i in {2,...,7} {
          \pgfmathsetmacro{\pct}{int(100 - (\i-1)/30*85)}
-         \node[daynode, fill=pink!\pct!purple, draw=darkrosedraw] (p\i) [right=of prev] {\i};
+         \node[daynode, fill=pink!\pct!purple, draw=pink2draw] (p\i) [right=of prev] {\i};
            \ifodd \i 
              \draw [dep] (p\i.south) to[out=-150, in=-30] (bottom); 
                \coordinate (top) at (p\i.north);
@@ -132,7 +113,7 @@
        \coordinate (bottom) at (dots2.south);
        \foreach \i in {25,...,31} {
          \pgfmathsetmacro{\pct}{int(100 - (\i-13)/30*85)}
-         \node[daynode, fill=pink!\pct!purple, draw=darkrosedraw] (p\i) [right=of prev] {\i};
+         \node[daynode, fill=pink!\pct!purple, draw=pink2draw] (p\i) [right=of prev] {\i};
            \ifodd \i 
              \draw [dep] (p\i.south) to[out=-150, in=-30] (bottom); 
                \coordinate (top) at (p\i.north);
@@ -158,170 +139,105 @@
     % ════════════════════════════════════════
 
 
-     \node[amber] (b1) [below=of p1] {1};
-    \node[teal] (b2) [right=of b1] {2};
-    \node[teal] (b3) [right=of b2] {3};
-    \node[purple] (b4) [right=of b3] {4};
-    \node[purple] (b5) [right=of b4] {5};
-    \node[purple] (b6) [right=of b5] {6};
-    \node[purple] (b7) [right=of b6] {7};
-    \node[coral] (b8) [right=of b7] {8};
-    \node[coral] (b9) [right=of b8] {9};
-    \node[coral] (b10) [right=of b9] {10};
-    \node[coral] (b11) [right=of b10] {11};
-    \node[coral] (b12) [right=of b11] {12};
-    \node[coral] (b13) [right=of b12] {13};
-    \node[coral] (b14) [right=of b13] {14};
-    \node[coral] (b15) [right=of b14] {15};
+    \node[orange] (b1) [below=of p1] {1};
+    \node[mint] (b2) [right=of b1] {2};
+    \node[mint] (b3) [right=of b2] {3};
+    \node[blue] (b4) [right=of b3] {4};
+    \node[blue] (b5) [right=of b4] {5};
+    \node[blue] (b6) [right=of b5] {6};
+    \node[blue] (b7) [right=of b6] {7};
+    \node[pink] (b8) [right=of b7] {8};
+    \node[pink] (b9) [right=of b8] {9};
+    \node[pink] (b10) [right=of b9] {10};
+    \node[pink] (b11) [right=of b10] {11};
+    \node[pink] (b12) [right=of b11] {12};
+    \node[pink] (b13) [right=of b12] {13};
+    \node[pink] (b14) [right=of b13] {14};
+    \node[pink] (b15) [right=of b14] {15};
 
-    \node[amber2] (b16) [below=14mm of b1] {16};
-    \node[teal2] (b17) [right=of b16] {17};
-    \node[teal2] (b18) [right=of b17] {18};
-    \node[purple2] (b19) [right=of b18] {19};
-    \node[purple2] (b20) [right=of b19] {20};
-    \node[purple2] (b21) [right=of b20] {21};
-    \node[purple2] (b22) [right=of b21] {22};
-    \node[coral2] (b23) [right=of b22] {23};
-    \node[coral2] (b24) [right=of b23] {24};
-    \node[coral2] (b25) [right=of b24] {25};
-    \node[coral2] (b26) [right=of b25] {26};
-    \node[coral2] (b27) [right=of b26] {27};
-    \node[coral2] (b28) [right=of b27] {28};
-    \node[coral2] (b29) [right=of b28] {29};
-    \node[coral2] (b30) [right=of b29] {30};
+    \node[orange2] (b16) [below=14mm of b1] {16};
+    \node[mint2] (b17) [right=of b16] {17};
+    \node[mint2] (b18) [right=of b17] {18};
+    \node[blue2] (b19) [right=of b18] {19};
+    \node[blue2] (b20) [right=of b19] {20};
+    \node[blue2] (b21) [right=of b20] {21};
+    \node[blue2] (b22) [right=of b21] {22};
+    \node[pink2] (b23) [right=of b22] {23};
+    \node[pink2] (b24) [right=of b23] {24};
+    \node[pink2] (b25) [right=of b24] {25};
+    \node[pink2] (b26) [right=of b25] {26};
+    \node[pink2] (b27) [right=of b26] {27};
+    \node[pink2] (b28) [right=of b27] {28};
+    \node[pink2] (b29) [right=of b28] {29};
+    \node[pink2] (b30) [right=of b29] {30};
     \node[gray] (b31) [right=of b30] {31};
 
-    % \coordinate (arcer) at ($(b1.north) + (0.5cm,0.20cm) $);
-    % \draw[dep] (b2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    % \draw[dep] (b3.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b2.south) + (0.5cm,-0.20cm) $);
-    % \draw[dep] (b4.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    % \draw[dep] (b5.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b3.north) + (0.5cm,0.40cm) $);
-    % \draw[dep] (b6.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    % \draw[dep] (b7.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-
-
-
-    % \coordinate (arcer) at ($(b1.north) + (0.5cm,0.20cm) $);
-    % \draw[dep] (b2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b1.north) + (0.5cm,0.40cm) $);
-    % \draw[dep] (b3.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    % \coordinate (arcer) at ($(b2.south) + (0.5cm,-0.20cm) $);
-    % \draw[dep] (b4.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b2.south) + (0.5cm,-0.40cm) $);
-    % \draw[dep] (b5.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    % \coordinate (arcer) at ($(b3.north) + (0.5cm,0.20cm) $);
-    % \draw[dep] (b6.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b3.north) + (0.5cm,0.40cm) $);
-    % \draw[dep] (b7.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    % \coordinate (arcer) at ($(b4.south) + (0.5cm,-0.60cm) $);
-    % \draw[dep] (b8.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=2.05cm];
-    % \coordinate (arcer) at ($(b4.south) + (0.5cm,-0.80cm) $);
-    % \draw[dep] (b9.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=2.73cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=2.73cm];
-    % \coordinate (arcer) at ($(b5.north) + (0.5cm,0.60cm) $);
-    % \draw[dep] (b10.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
-    % \coordinate (arcer) at ($(b5.north) + (0.5cm,0.80cm) $);
-    % \draw[dep] (b11.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.73cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.73cm];
-    % \coordinate (arcer) at ($(b6.south) + (0.5cm,-1.00cm) $);
-    % \draw[dep] (b12.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=3.41cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=3.41cm];
-    % \coordinate (arcer) at ($(b6.south) + (0.5cm,-1.20cm) $);
-    % \draw[dep] (b13.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=4.10cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=4.10cm];
-    % \coordinate (arcer) at ($(b7.north) + (0.5cm,1.00cm) $);
-    % \draw[dep] (b14.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=3.41cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=3.41cm];
-    % \coordinate (arcer) at ($(b7.north) + (0.5cm,1.20cm) $);
-    % \draw[dep] (b15.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=4.10cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=4.10cm];
-
-
-    % \coordinate (arcer) at ($(b1.north) + (0.5cm,0.20cm) $);
-    % \draw[depteal] (b2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    % \draw[depteal] (b3.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b2.south) + (0.5cm,-0.20cm) $);
-    % \draw[deppurple] (b4.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    % \draw[deppurple] (b5.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    % \coordinate (arcer) at ($(b3.north) + (0.5cm,0.40cm) $);
-    % \draw[deppurple] (b6.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    % \draw[deppurple] (b7.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    % \coordinate (arcer) at ($(b4.south) + (0.5cm,-0.40cm) $);
-    % \draw[depcoral] (b8.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    % \draw[depcoral] (b9.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    % \coordinate (arcer) at ($(b5.north) + (0.5cm,0.60cm) $);
-    % \draw[depcoral] (b10.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
-    % \draw[depcoral] (b11.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
-    % \coordinate (arcer) at ($(b6.south) + (0.5cm,-0.60cm) $);
-    % \draw[depcoral] (b12.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=2.05cm];
-    % \draw[depcoral] (b13.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=2.05cm];
-    % \coordinate (arcer) at ($(b7.north) + (0.5cm,0.80cm) $);
-    % \draw[depcoral] (b14.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.73cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.73cm];
-    % \draw[depcoral] (b15.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.73cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.73cm];
-
-
     \coordinate (arcer) at ($(b1.north) + (0.5cm,0.20cm) $);
-    \draw[depteal] (b2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depmint] (b2.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b1.south) + (0.5cm,-0.20cm) $);
-    \draw[depteal] (b3.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depmint] (b3.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b2.south) + (0.5cm,-0.40cm) $);
-    \draw[deppurple] (b4.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    \draw[deppurple] (b5.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[depblue] (b4.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[depblue] (b5.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
     \coordinate (arcer) at ($(b3.north) + (0.5cm,0.20cm) $);
-    \draw[deppurple] (b6.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    \draw[deppurple] (b7.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depblue] (b6.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depblue] (b7.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b4.north) + (0.5cm,0.40cm) $);
-    \draw[depcoral] (b8.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    \draw[depcoral] (b9.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink] (b8.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink] (b9.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
     \coordinate (arcer) at ($(b5.north) + (0.5cm,0.60cm) $);
-    \draw[depcoral] (b10.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
-    \draw[depcoral] (b11.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
+    \draw[deppink] (b10.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
+    \draw[deppink] (b11.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
     \coordinate (arcer) at ($(b6.south) + (0.5cm,-0.20cm) $);
-    \draw[depcoral] (b12.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    \draw[depcoral] (b13.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
+    \draw[deppink] (b12.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
+    \draw[deppink] (b13.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b7.south) + (0.5cm,-0.40cm) $);
-    \draw[depcoral] (b14.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    \draw[depcoral] (b15.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink] (b14.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink] (b15.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
 
     \coordinate (curvepoint) at ($(b1.south) + (0cm,-0.60cm) $);
     \coordinate (arcpoint) at ($(b8.south) + (-0.5cm,-0.60cm) $);
     \draw[depgray] (b16.west) arc[start angle=270, end angle=90, x radius=0.58cm, y radius=0.58cm] -- (curvepoint) -- (arcpoint) arc[start angle=-90, end angle=-45, x radius=0.70cm, y radius=2.05cm];
 
     \coordinate (arcer) at ($(b16.north) + (0.5cm,0.20cm) $);
-    \draw[depteal2] (b17.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depmint2] (b17.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b16.south) + (0.5cm,-0.20cm) $);
-    \draw[depteal2] (b18.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depmint2] (b18.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b17.south) + (0.5cm,-0.40cm) $);
-    \draw[deppurple2] (b19.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    \draw[deppurple2] (b20.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[depblue2] (b19.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[depblue2] (b20.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
     \coordinate (arcer) at ($(b18.north) + (0.5cm,0.20cm) $);
-    \draw[deppurple2] (b21.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
-    \draw[deppurple2] (b22.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depblue2] (b21.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
+    \draw[depblue2] (b22.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b19.north) + (0.5cm,0.40cm) $);
-    \draw[depcoral2] (b23.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
-    \draw[depcoral2] (b24.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink2] (b23.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink2] (b24.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=1.36cm];
     \coordinate (arcer) at ($(b20.north) + (0.5cm,0.60cm) $);
-    \draw[depcoral2] (b25.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
-    \draw[depcoral2] (b26.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
+    \draw[deppink2] (b25.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
+    \draw[deppink2] (b26.north) arc[start angle=45, end angle=90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=90, end angle=135, x radius=0.70cm, y radius=2.05cm];
     \coordinate (arcer) at ($(b21.south) + (0.5cm,-0.20cm) $);
-    \draw[depcoral2] (b27.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
-    \draw[depcoral2] (b28.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
+    \draw[deppink2] (b27.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
+    \draw[deppink2] (b28.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=0.68cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=0.68cm];
     \coordinate (arcer) at ($(b22.south) + (0.5cm,-0.40cm) $);
-    \draw[depcoral2] (b29.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
-    \draw[depcoral2] (b30.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink2] (b29.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
+    \draw[deppink2] (b30.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=1.36cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=1.36cm];
     \coordinate (arcer) at ($(b23.south) + (0.5cm,-0.60cm) $);
     \draw[depgray] (b31.south) arc[start angle=-45, end angle=-90, x radius=0.70cm, y radius=2.05cm] -- (arcer) arc[start angle=-90, end angle=-135, x radius=0.70cm, y radius=2.05cm];
 
 
-      \node[font=\small\bfseries, anchor=west] at ($(b1) + (0, 0.9)$) {Binary Search Tree};
-      \node[font=\scriptsize, anchor=west] at ($(b16) + (0, -1.2)$)
+    \node[font=\small\bfseries, anchor=west] at ($(b1) + (0, 0.9)$) {Binary Search Tree};
+    \node[font=\scriptsize, anchor=west] at ($(b16) + (0, -1.2)$)
         {Each day is based on what would be it's parent in a binary search tree. Node 16 is again used as a root for a tree.};
 
-        \node[font=\scriptsize] (leglabel) at ($ (b16) + (0,-1.6) $) {\textbf{Steps to Base:}};
-    \node[swatchamber] (d0) [right=of leglabel] {0};
-    \node[swatchteal] (d1) [right=of d0] {1};
-    \node[swatchpurple] (d2) [right=of d1] {2};
-    \node[swatchcoral] (d3) [right=of d2] {3};
-    \node[swatchamber2] (d4) [right=of d3] {4};
-    \node[swatchteal2] (d5) [right=of d4] {5};
-    \node[swatchpurple2] (d6) [right=of d5] {6};
-    \node[swatchcoral2] (d7) [right=of d6] {7};
+    \node[font=\scriptsize] (leglabel) at ($ (b16) + (0,-1.6) $) {\textbf{Steps to Base:}};
+    \node[swatchorange] (d0) [right=of leglabel] {0};
+    \node[swatchmint] (d1) [right=of d0] {1};
+    \node[swatchblue] (d2) [right=of d1] {2};
+    \node[swatchpink] (d3) [right=of d2] {3};
+    \node[swatchorange2] (d4) [right=of d3] {4};
+    \node[swatchmint2] (d5) [right=of d4] {5};
+    \node[swatchblue2] (d6) [right=of d5] {6};
+    \node[swatchpink2] (d7) [right=of d6] {7};
     \node[swatchgray] (d8) [right=of d7] {8};
 
     \end{tikzpicture}

@@ -6,7 +6,7 @@ historical DNS record database into a delta-based storage system. The results co
 a majority of the collected DNS records remain unchanged between measurements. The introduced DeltaParq, a schema-aware 
 delta-based storage prototype build for the OpenINTEL project, showed that this can be used to reduce storage usage.
 An evaluation over multiple datasets showed that up to about 49.25\% of storage space can be saved using the 
-Progressive strategy, which also comes with a significantly longer analysis time. Other evaluated strategies, 
+Progressive strategy, which also comes with a significantly longer analysis time with an increase of 98.65\%. Other evaluated strategies, 
 such as the BST strategy, show that saving a substantial amount of storage space can be done with less impact 
 on the analysis time. Using this the system can be tuned to the preferences of its user.
 
@@ -17,9 +17,8 @@ on the analysis time. Using this the system can be tuned to the preferences of i
 
 \subsection{Future Work}
 
-The findings of this research point to multiple directions for future research. First, the bottleneck identified in the design 
-of the DeltaParq system~\ref{sec:performance_constraints}, the shuffle overhead caused by pyspark not being able to use 
-sorted or partitioned data without a Hive metastore. A deployment with support for partitioning on storing and reading may significantly 
+The findings of this research point to multiple directions for future research. Firstly, the bottleneck identified in Section~\ref{sec:performance_constraints}, 
+the shuffle overhead caused by PySpark not being able to use sorted or partitioned data without a Hive metastore. A deployment with support for partitioning on storing and reading may significantly 
 reduce the overhead in analysis time, which could potentially make the analysis time of strategies that use long dependency chains, such as 
 the Progressive strategy, significantly lower. Furthermore, it may make more frequent anchor resets, such as weekly instead of monthly, 
 more viable as the increased analysis time identified in~\ref{sec:discussion} would have less of an impact.
@@ -28,10 +27,13 @@ Secondly, this research evaluated the DeltaParq prototype on only 2 datasets bas
 schema-aware delta-based storage systems over more datasets, both within the same OpenINTEL structure, and other domains with similar 
 volatile and non-volatile data columns, would strengthen the conclusions and the generalizability beyond the OpenINTEL system.
 
-Finally, with more data and more research, models could be created for optimizing strategy selection for each underlying dataset. 
-Creating a model both for mapping a combination of the properties of a specific strategy and the structure of the underlying dataset, 
-i.e. which type of data changes how often, to the impact it could have on storage and analysis efficiency, would allow for an automated system 
-to determine the best strategy to use for getting a preferred balance in storage and analysis efficiency. 
+Finally, strategies can be optimized for both better performance and data safety.
+Further research could explore the possibility of using the structure of the underlying dataset combined with the 
+properties of the strategies to automatically select a strategy that performs optimally for a user defined balance 
+between storage reduction and analysis time increase. Furthermore, certain strategies could be extended. For example,
+adding a bridging delta between the last day of the month and the first day of the next month in the progressive strategy, 
+would allow for a smart system to recover a singular corrupted delta.
+
 
 % Spark optimization -> May make more aggressive strategies possible
 % Test on more datasets

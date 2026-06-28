@@ -21,7 +21,7 @@
             ]
 
             \addplot[
-                color=gray, thick, mark=none,
+                color=gray, line width=1.5pt, mark=none,
             ] coordinates {
                 (1,42.74) (2,42.92) (3,42.92) (4,42.93) (5,42.83) (6,42.94)
                 (7,42.95) (8,42.83) (9,42.89) (10,42.92) (11,42.92) (12,42.95)
@@ -33,7 +33,7 @@
             \addlegendentry{Baseline}
 
             \addplot[
-                color=blue, thick, mark=none,
+                color=blue, line width=1.5pt, loosely dashed, mark=none,
             ] coordinates {
                 (1,46.38) (2,23.79) (3,27.91) (4,31.64) (5,34.12) (6,37.96) 
                 (7,40.22) (8,41.54) (9,42.61) (10,43.56) (11,44.20) (12,44.79) 
@@ -47,7 +47,7 @@
 
 
             \addplot[
-                name path = lower, color=teal, thick, mark=none,
+                color=teal, line width=1.5pt, densely dashed, mark=none,
             ] coordinates {
                 (1,46.38) (2,23.79) (3,25.03) (4,24.27) (5,23.14) (6,24.93)
                 (7,23.38) (8,22.94) (9,24.36) (10,24.69) (11,24.98) (12,23.88)
@@ -60,7 +60,7 @@
 
 
             \addplot[
-                name path = upper, color=orange, thick, mark=none,
+                color=orange, line width=1.5pt, dash dot, mark=none,
             ] coordinates {
                 (1,46.38) (2,23.79) (3,27.91) (4,29.08) (5,31.83) (6,31.60)
                 (7,34.31) (8,32.84) (9,36.33) (10,37.76) (11,41.03) (12,40.28)
@@ -74,8 +74,10 @@
             \end{axis}
         \end{tikzpicture}
     \end{center}
+    \vspace*{-1\baselineskip}
     \caption{
         Storage size \textbf{per day of the month} on the $.li$ dataset, averaged across all months of 2025 that contain that day
     }
+    \vspace*{-1\baselineskip}
     \label{fig:storage_sizes_li}
 \end{figure}

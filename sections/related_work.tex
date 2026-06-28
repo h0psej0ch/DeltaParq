@@ -8,46 +8,46 @@ to the write-only Parquet storage files.
 The program closest to meeting the needs of the OpenINTEL storage system is 
 Apache Hudi\footnote{\url{https://hudi.apache.org/}}. Hudi is a storage management 
 system built on top of database formats like Parquet. Hudi adds 
-log files onto these files that describe changes, these can be seen 
+log files onto these files, which describe changes and can be viewed 
 as deltas to the original Parquet file. However, it is limited by its retrieval and 
 storage capabilities. Hudi was created as an efficient way to apply edits to a 
-write-only database. Because of this it only has functions to retrieve the current status 
+write-only database. Because of this, it only has functions to retrieve the current status 
 which applies all delta logs at once. Hudi lacks the feature of constructing the table for 
-any given snapshot. Furthermore, a build in feature that cannot be removed from Hudi is its 
+any given snapshot. Furthermore, a built-in feature that cannot be removed from Hudi is its 
 Compaction feature. Hudi will regularly update the base snapshot which merges the first few 
 log files into the base and writes a new base file. This would destroy the history stored in 
-the log files.\\
+the log files.
 
 Both Apache Iceberg\footnote{\url{https://iceberg.apache.org/}} and Delta Lake\footnote{\url{https://delta.io/}} 
-take a different approach to extending the Parquet storage format. Both systems create a time 
-travel system by keeping track of snapshots for every update. This is done by creating new Parquet 
-files for every update to the base. A time can then be added to the query to which these systems 
+take a different approach to extending the Parquet storage format. Both systems create a time-travel 
+system by keeping track of snapshots for every update. This is done by creating new Parquet 
+files for every update to the base. A timestamp can then be added to the query to which these systems 
 retrieve the relevant Parquet files. However, the important pitfall with these systems is that 
-they are not capable of storing deltas, they only store snapshots. Unlike Hudi, these systems 
+they are not capable of storing deltas; they only store snapshots. Unlike Hudi, these systems 
 are not designed to progressively add snapshots together, but for full snapshots. These systems 
 expect every measurement to be a full snapshot repeating all the data and not saving on storage 
-efficiency at all. If one were to use these systems by adding only the changed rows to each day, 
+efficiency at all. If these systems would be used by adding only the changed rows to each day, 
 the systems are not capable of combining the different snapshots together, this would have to be 
-done manually where each Parquet for each day would be retrieved and combined.\\
+done manually where each Parquet for each day would be retrieved and combined.
 
 Furthermore, none of these current systems are able to handle formats with partially 
-volatile columns that update every measurement.\\
+volatile columns that update every measurement.
 
-\subsection{DNS Measuring Storage Systems}
+\subsection{DNS Measurement Storage Systems}
 
 Next to the OpenINTEL project which this research will build on, several DNS 
 history providers exist. The most prominent one is the ActiveDNS 
 project\footnote{\url{https://activednsproject.org/}}. Similar to OpenINTEL, ActiveDNS stores 
-daily DNS records. The ActiveDNS project collects data from multiple vantage points, 
+daily DNS records. The ActiveDNS project collects data from multiple vantage points; 
 this results in possible duplicate data which is deduplicated in the storage module 
 of the system~\cite{DBLP:conf/raid/KountourasKLCND16}. However, like OpenINTEL, 
 ActiveDNS does not have any deduplication of data between separate days. 
 
 Furthermore, commercial providers exist such as the Farsight 
-DNSDB\footnote{\url{https://www.domaintools.com/}}, WhoisXMLAPIs DNS 
+DNSDB\footnote{\url{https://www.domaintools.com/}}, WhoisXMLAPI's DNS 
 Database\footnote{\url{https://dns-history.whoisxmlapi.com/database}}, and SpamHaus's
 passive DNS database\footnote{\url{https://www.spamhaus.com/data-access/passive-dns-api/}}. 
-All of these providers do not provide any public documentation on their storage system, thus 
+None of these providers provide any public documentation on their storage system, thus 
 it cannot be concluded if any type of delta-compression is used to efficiently store their data.
 
 \subsection{Delta Strategies}
@@ -59,17 +59,18 @@ bi-directionally predicted images allow for even smaller deltas as the similarit
 the previous and the next data point can be used. Under the hypothesis that DNS records 
 do not change often, this could be beneficial for the OpenINTEL storage system in principle.
 However, the OpenINTEL storage system does not have immediate access to all data. 
-The system would not be able to store the current days data without knowing the data of the 
+The system would not be able to store the current day's data without knowing the data of the 
 next day. This would cause more temporary storage overhead and adds complexity to the 
 storage system which is unfavorable.
 
-Furthermore, different types of files have been tested with several strategies to reduce 
-dependencies on other snapshots while retaining storage efficiency~\cite{10.5555/2667702.2667705}. 
+Furthermore, Molfetas et al.~\cite{DBLP:conf/awc/MolfetasWZ14} tested several combinations of files and strategies 
+with the goal of reducing the amount of dependencies on other snapshots while retaining storage efficiency. 
 This work is similar in nature since it touches on the effects of using delta-compression, however it does not take into account 
 the vast amount of the data being stored by the OpenINTEL project and the significant time loss of 
 I/O operations on the hard disks for retrieval of the resulting data that this creates.
 
-LoopDelta does identify the extra I/O operations necessary for reconstruction of 
-delta files as a bottleneck in delta-based storage~\cite{10.1145/3721485}. But, similar to the video 
-codecs, LoopDelta relies partially on backwards deltas which require the next day to be known 
-in the OpenINTEL system for the compression optimization.
+LoopDelta, a delta-based compression framework with backups in mind, does identify the extra I/O 
+operations necessary for reconstruction of delta files as a bottleneck in delta-based 
+storage~\cite{10.1145/3721485}. But, similar to the aforementioned video codecs, LoopDelta relies 
+partially on backwards deltas which require the next day to be known in the OpenINTEL system 
+for the compression optimization.

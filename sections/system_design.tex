@@ -3,14 +3,14 @@
 \subsection{System Overview}
 
 \hspace{\parindent}\textbf{Infrastructure:} For the design of the DeltaParq system, the structure and resources 
-of the current system has been taken into account. The OpenINTEL system 
-utilizes a Hive partitioned S3 storage cluster~\cite{7460220}.
-Furthermore, Apache Spark, with its Python derivative psypark, is used for 
-querying and analyzing the dataset. Consequently the DeltaParq is based on pyspark 
+of the current system have been taken into account. The OpenINTEL system 
+utilizes a Hive partitioned dataset on an S3 compatible storage cluster~\cite{7460220}.
+Furthermore, Apache Spark, with its Python derivative PySpark, is used for 
+querying and analyzing the dataset. Consequently, the DeltaParq is based on PySpark 
 and supports storage retrieval from an S3 cluster. However, while the DeltaParq system 
 has been designed for the OpenINTEL project, it has also been designed with 
 generalizability in mind. The system uses a configuration file to set 
-which columns are part of the primary key(PK) and which columns are volatile, 
+which columns are part of the primary key (PK) and which columns are volatile, 
 this way other datasets could utilize the DeltaParq as well. All join operations 
 within the system utilize this PK as the join condition. Furthermore, 
 the integrations of the DeltaParq are extendible. Integrations with different 
@@ -27,7 +27,7 @@ in the configuration.
     \texttt{/month=\{month:02\}/day=\{day:02\}/"}
 \end{gathered}
 \]
-Using this hierarchy, DeltaParq treats each month as a self-contained unit, this way each delta 
+Using this hierarchy, DeltaParq treats each month as a self-contained unit; this way each delta 
 can only depend on a day in the same month. As the first day of the month is always the start, a 
 part of the configuration called the $month\_config$ is stored in the month's directory. This part of  
 the config describes the primary key, volatile columns, and strategy. This makes each stored month 
@@ -43,17 +43,17 @@ which delta is based on which base, a strategy can be encoded as a function $str
 \textbf{Schema Decomposition:} As mentioned in the problem statement, the OpenINTEL dataset 
 contains both volatile and non-volatile data. As the volatile data is almost guaranteed 
 to change between each measurement, these columns need to be removed from the non-volatile 
-data using a schema decomposition. Using pyspark, the decomposition can be easily done by 
+data using a schema decomposition. Using PySpark, the decomposition can be easily done by 
 selecting only the necessary columns of a dataframe. For the volatile data, both the columns 
-marked as volatile in the configuration and the columns of the primary key are selected 
-such that this data can be joined with the non-volatile data for which all original columns, 
-without the columns marked as volatile, but including the primary key, are selected. 
-The resulting volatile dataframe can immediately be written to storage, while non-volatile 
-dataframe needs to be processed using delta generation to be stored in the DeltaParq.
+marked as volatile in the configuration and the columns of the primary key are selected. 
+The resulting volatile dataframe can immediately be written to storage.
+For the non-volatile data all original columns, excluding the columns marked as volatile, 
+but including the primary key, are selected. This dataframe then needs to be processed 
+using delta generation, after which it can be written to storage.
 
 \textbf{Delta Generation:} The concept of delta generation is based on filtering out all the rows that are different 
 in the updated version compared to the base version. The OpenINTEL dataset, and DNS records 
-in general, have an inherent flaw making this difficult: DNS records do not have a unique identifier.
+in general, have an inherent flaw that makes this difficult: DNS records do not have a unique identifier.
 The identifiers for a DNS record is its domain name and record type, but this combination does not have to be
 unique. For example, the domain name example.com could return multiple TXT records, if between measurements
 one TXT record changes while another is removed, there is no way of keeping track which of the TXT records 
@@ -63,7 +63,7 @@ or the whole set of rows identified by the domain name and type is deemed as upd
 For the DeltaParq, the latter option of storing the full identified block was chosen based on the average block size 
 being relatively small. \\ 
 
-A simple subtraction based algorithm, such as Algorithm~\ref{alg:subtract-based-delta} uses the pyspark subtract function 
+A simple subtraction based algorithm, such as Algorithm~\ref{alg:subtract-based-delta}, uses the PySpark subtract function 
 to gather all rows in the updated dataframe not present in the removed dataframe. Rows that do not exist in the update 
 but do exist in the base dataframe will not show up in this subtraction, thus a second subtraction needs to be done 
 to gather all rows in the base dataframe not present in the update. Combining these keys together 
@@ -81,17 +81,18 @@ then results in all keys necessary for the delta.
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
+\vspace*{-1\baselineskip}
 
 While the subtract-based delta generation worked, it is not efficient. The main bottleneck of the 
 OpenINTEL system is the retrieval from storage. If both the dataframes do not fit in the allocated RAM,
-during operations, they need to be retrieved multiple times for the subtractions after which the update 
+during operations, they need to be retrieved multiple times for the subtractions, after which the update 
 dataframe is needed once more for the join with the delta keys. To counter these retrievals, a hash-based 
 delta generation algorithm, Algorithm~\ref{alg:hash-based-delta}, has been designed. The hash-based delta
 generation uses an auxiliary function to transform a dataframe such that each row is a primary key combined 
 with a hash generated from all values in all rows from a block. This way the data stored in memory is smaller 
 and only requires one match between dataframes instead of comparing each row with all others like the 
 subtract-based generation would. Using this auxiliary function a hash-based dataframe can be generated 
-for both the base and the update to then join these dataframes and filter out all keys that have matching 
+for both the base and the update, to then join these dataframes and filter out all keys that have matching 
 hashes. Finally, the primary keys that remain will identify all rows from the update to store in the delta.
 
 \begin{algorithm}
@@ -124,15 +125,10 @@ Retrieving a dataframe for a given day from the DeltaParq requires exploring the
 dependency chain, reconstruct all dataframes in the dependency chain, and finally join 
 the dataframe with the volatile data of the day that is to be retrieved.
 
-\textbf{Dependency Resolution:} Given a delta strategy function $strategy: \mathbb{Z} \rightarrow \mathbb{Z}$ that maps each
+\textbf{Dependency Resolution:} Given a delta strategy function\\ $strategy: \mathbb{Z} \rightarrow \mathbb{Z}$ that maps each
 day to the day it depends on, the dependency chain for a given day can be resolved for a day by 
 walking the chain until a snapshot, identified by $strategy(d) = d$, is reached. If multiple 
-days are requested, the dependency chain is walked for each day. If at any point a dependency is 
-identified that was already part of the chain of a different day, the chains are merged. This way 
-the dependency resolver always returns a chain without duplicates that ensures that each day's 
-dependency precedes itself in the chain:
-$$\forall d \in chain,\quad strategy(d) = d \;\lor\; strategy(d) \in chain_{[:i_d]}$$
-where $chain_{[:i_d]}$ denotes the chain up until $d$.
+days are requested, the resulting dependency chains are merged together without duplicates.
 
 \textbf{Delta Reconstruction:} Using the resolved dependency chain, the full dataframe for each day in the chain can be reconstructed 
 which will result in all the requested days being reconstructed as well. For a snapshot day the data is read 
@@ -144,7 +140,7 @@ $$(base \triangleright delta) \cup delta$$
 As a final step for reconstructing the full dataframe, the applied delta needs to be joined with the volatile dataframe. 
 Even if the volatile columns are not used in the further analysis, the volatile dataframe determines which data was present 
 for the specific measurement. Since the delta only stores updates found in the new measurement, blocks that were fully removed 
-from in the update cannot be present in the delta dataframe. Since the volatile dataframe measures all the present blocks and 
+in the update cannot be present in the delta dataframe. The volatile dataframe measures all the present blocks and 
 its volatile columns for each measurement, this can be used to filter out all the completely removed blocks that are still 
 present in the applied delta as these would not be present in the volatile dataframe.
 
@@ -152,7 +148,7 @@ present in the applied delta as these would not be present in the volatile dataf
 of the dataframes is structured such that any dataframes that would be retrieved multiple times in the different dependency 
 chain of each requested day is only retrieved once. Furthermore, the retrieval methods of the DeltaParq offer a column selection 
 and filter pushdown. Both the column selection and filter are immediately applied to the dataframes retrieved from storage, like 
-pyspark's lazy evaluation would do. This way only the necessary data is retrieved speeding up the retrieval and analysis process.
+PySpark's lazy evaluation would do. This way only the necessary data is retrieved speeding up the retrieval and analysis process.
 
 \subsection{Performance Constraints}
 \label{sec:performance_constraints}
@@ -163,13 +159,13 @@ on multiple executors, the executors need to share information for these wide op
 from the other dataframe present on a different executor causing waiting time on other nodes and extra overhead for sharing the data. 
 If all data is partitioned such that each partition is guaranteed to have all rows for each primary key it has, no data sharing is 
 necessary for these wide operations as each executor now knows they aren't possibly missing data. If this partitioning is done efficiently
-on write and pyspark were able to read this, the now broad execution path of combining all the data can be transformed into a direct linear 
+when writing to storage, and PySpark were able to read this, the now broad execution path of combining all the data can be transformed into a direct linear 
 path for each executor.
 
-However, while pyspark does support saving partitions in buckets, it is only able to do this by using a Hive metastore. The 
+However, while PySpark does support saving partitions in buckets, it is only able to do this by using a Hive metastore. The 
 metastore would store all the information on which buckets were used to ensure correctness, the same way DeltaParq uses a stored 
-monthly configuration for its self-describing storage. Without a metastore pyspark does not have a guarantee that the data is 
-partitioned or bucketed and will always assume no partitioning. Furthermore, pyspark does not offer a way of telling the program 
+monthly configuration for its self-describing storage. Without a metastore PySpark does not have a guarantee that the data is 
+partitioned or bucketed and will always assume no partitioning. Furthermore, PySpark does not offer a way of telling the program 
 the data is partitioned in a certain way without the metastore. In the current deployment, no metastore is available, therefore 
 the DeltaParq has not been integrated with any form of partitions.
 

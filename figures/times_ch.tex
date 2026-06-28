@@ -21,7 +21,7 @@
             ]
 
             \addplot[
-                color=gray, thick, mark=none,
+                color=gray, line width=1.5pt, mark=none,
             ] coordinates {
 (1,11.98) (2,10.65) (3,10.52) (4,10.23) (5,10.22) (6,10.10)
 (7,10.13) (8,9.99) (9,9.89) (10,9.80) (11,9.86) (12,9.67)
@@ -33,7 +33,7 @@
             \addlegendentry{Baseline}
 
             \addplot[
-                color=blue, thick, mark=none,
+                color=blue, line width=1.5pt, loosely dashed, mark=none,
             ] coordinates {
 (1,15.51) (2,12.28) (3,11.93) (4,12.13) (5,12.20) (6,12.30)
 (7,12.64) (8,12.67) (9,12.36) (10,12.64) (11,12.39) (12,12.41)
@@ -47,7 +47,7 @@
 
 
             \addplot[
-                name path = lower, color=teal, thick, mark=none,
+                color=teal, line width=1.5pt, densely dashed, mark=none,
             ] coordinates {
 (1,15.29) (2,12.28) (3,12.63) (4,13.55) (5,13.98) (6,15.01)
 (7,15.73) (8,16.28) (9,17.08) (10,17.94) (11,18.46) (12,19.30)
@@ -60,7 +60,7 @@
 
 
             \addplot[
-                name path = upper, color=orange, thick, mark=none,
+                color=orange, line width=1.5pt, dash dot, mark=none,
             ] coordinates {
 (1,15.15) (2,12.25) (3,12.40) (4,12.83) (5,13.36) (6,13.01)
 (7,13.39) (8,14.21) (9,14.17) (10,14.60) (11,14.48) (12,14.53)
@@ -138,9 +138,11 @@
             \end{axis}
         \end{tikzpicture}
     \end{center}
+    \vspace*{-1\baselineskip}
     \caption{
         Analysis time \textbf{per day of the month} on the $.ch$ dataset, averaged across all months of 2025 that contain that day. 
         Shaded bands represent the 95\% confidence interval, where not visible, the interval is narrower than the line width.
     }
+    \vspace*{-1\baselineskip}
     \label{fig:analysis_times_ch}
 \end{figure}

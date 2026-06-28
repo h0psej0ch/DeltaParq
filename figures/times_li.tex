@@ -21,7 +21,7 @@
             ]
 
             \addplot[
-                color=gray, thick, mark=none,
+                color=gray, line width=1.5pt, mark=none,
             ] coordinates {
                 (1,16.34) (2,15.43) (3,15.77) (4,15.15) (5,15.13) (6,14.92)
                 (7,14.91) (8,15.15) (9,14.97) (10,14.96) (11,14.88) (12,14.51)
@@ -33,7 +33,7 @@
             \addlegendentry{Baseline}
 
             \addplot[
-                color=blue, thick, mark=none,
+                color=blue, line width=1.5pt, loosely dashed, mark=none,
             ] coordinates {
                 (1,24.46) (2,12.83) (3,12.66) (4,12.72) (5,12.79) (6,12.84)
                 (7,12.95) (8,13.13) (9,13.12) (10,13.07) (11,13.06) (12,13.15)
@@ -47,7 +47,7 @@
 
 
             \addplot[
-                name path = lower, color=teal, thick, mark=none,
+                color=teal, line width=1.5pt, densely dashed, mark=none,
             ] coordinates {
                 (1,24.22) (2,12.58) (3,13.14) (4,14.04) (5,14.85) (6,15.74)
                 (7,16.63) (8,17.59) (9,18.67) (10,19.80) (11,20.91) (12,22.09)
@@ -60,7 +60,7 @@
 
 
             \addplot[
-                name path = upper, color=orange, thick, mark=none,
+                color=orange, line width=1.5pt, dash dot, mark=none,
             ] coordinates {
                 (1,24.78) (2,12.95) (3,12.63) (4,13.69) (5,13.80) (6,13.73)
                 (7,13.81) (8,14.55) (9,14.75) (10,15.04) (11,14.95) (12,15.12)
@@ -138,9 +138,11 @@
             \end{axis}
         \end{tikzpicture}
     \end{center}
+    \vspace*{-1\baselineskip}
     \caption{
-        Analysis time \textbf{per day of the month} on the $.li$ dataset, averaged across all months of 2025 that contain that day
+        Analysis time \textbf{per day of the month} on the $.li$ dataset, averaged across all months of 2025 that contain that day.
         Shaded bands represent the 95\% confidence interval, where not visible, the interval is narrower than the line width.
     }
+    \vspace*{-1\baselineskip}
     \label{fig:analysis_times_li}
 \end{figure}

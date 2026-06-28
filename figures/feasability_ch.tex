@@ -3,7 +3,7 @@
     \begin{tikzpicture}
         \begin{axis}[
             ylabel=Time (s),
-            height = 6cm,
+            height = 5cm,
             width = 8cm,
             major x tick style = transparent,
             ybar=2*\pgflinewidth,
@@ -16,30 +16,48 @@
             ymin=0,
             legend cell align=left,
         ]
-            \addplot[style={fill=gray!40}, error bars/.cd, y dir=both, y explicit] 
+            \addplot[
+                fill=gray!40,
+                postaction={pattern=north east lines, pattern color=black!80},
+                error bars/.cd, y dir=both, y explicit
+            ]
             coordinates {
                 (Build,349.47103571891785) += (0,10.679161510205455) -= (0,10.679161510205455)
                 (Restore,339.41917506191464) += (0,10.34214716784975) -= (0,10.34214716784975)
             };
-            \addplot[style={fill=blue!40}, error bars/.cd, y dir=both, y explicit] 
+            \addplot[
+                fill=blue!40,
+                postaction={pattern=north west lines, pattern color=black!80},
+                error bars/.cd, y dir=both, y explicit
+            ]
             coordinates {
                 (Build,411.22702378696863) += (0,11.476929200671313) -= (0,11.476929200671313)
                 (Restore,251.44853728347354) += (0,7.749806887500964) -= (0,7.749806887500964)
             };
-            \addplot[style={fill=teal!40}, error bars/.cd, y dir=both, y explicit] 
+            \addplot[
+                fill=teal!40,
+                postaction={pattern=crosshatch, pattern color=black!65},
+                error bars/.cd, y dir=both, y explicit
+            ]
             coordinates {
                 (Build,394.518306977219) += (0,11.195034330035364) -= (0,11.195034330035364)
                 (Restore,186.3021261162228) += (0,9.720615118588121) -= (0,9.720615118588121)
             };
-            \addplot[style={fill=orange!40}, error bars/.cd, y dir=both, y explicit] 
+            \addplot[
+                fill=orange!40,
+                error bars/.cd, y dir=both, y explicit
+            ]
             coordinates {
                 (Build,418.6252277559704) += (0,29.047262444019182) -= (0,29.047262444019182)
                 (Restore,239.80459064245224) += (0,19.48690922205742) -= (0,19.48690922205742)
             };
+        \footnotesize
         \legend{Baseline, Anchor, Progressive, BST}
         \end{axis}
     \end{tikzpicture}
+    \vspace*{-1\baselineskip}
     \caption{Average build and restore times \textbf{per month} with the 95\% confidence interval over the sampled $.ch$ dataset.}
+    \vspace*{-1\baselineskip}
     \label{fig:build_restore_ch}
     \end{center}
 \end{figure}

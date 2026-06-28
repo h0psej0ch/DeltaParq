@@ -10,42 +10,48 @@ dataframe must be set-equal to the original dataframe:
     \Leftrightarrow\quad reconstructed \subseteq original \;\wedge\; original \subseteq reconstructed \\
     \Leftrightarrow\quad reconstructed \setminus original = \emptyset \;\wedge\; original \setminus reconstructed = \emptyset
 \end{gather*}
-This maps directly to pyspark's $subtract()$ method, where the differences between dataframes 
-are computed. Ensuring the count of the result dataframes is equal to 0 will verify the correctness.
+This maps directly to PySpark's $subtract()$ method, where the differences between dataframes 
+are computed. Ensuring the count of the result dataframes is equal to 0, will verify the correctness.
 All versions of delta generation in the DeltaParq system passed these tests across both datasets.
 
 
 \subsection{Strategies}
 
-For the evaluation, three primary strategies have been selected alongside the baseline described in Section~\ref{sec:baseline} 
+For the evaluation, three primary strategies have been selected alongside the baseline described in Section~\ref{sec:baseline}. 
 This selection is based on the following two competing factors. First, a larger dependency step size, meaning the amount of 
 days between a delta and its dependency, will result in more data being changed and thus less storage being saved. 
 Second, a higher dependency depth, meaning the amount of steps until a full snapshot is reached, will result in a higher 
 retrieval time as more computation needs to be done to apply all the steps. The three selected strategies represent 
-different possible combinations of these factors.
+different possible combinations of these factors. Furthermore, an additional consideration for choosing a delta strategy
+is the result of data corruption. If the base of a delta corrupts, the delta itself will also not be recoverable, 
+thus if many days depend on a singular day, the amount of data potentially lost increases. 
+A visual overview of the selected diagrams can be found in Appendix~\ref{sec:strat_diag}.
 
 \textbf{Anchor:} The anchor strategy uses a singular full snapshot at the first of the month, all other days are a delta based 
 on this full snapshot. This results in a constant dependency depth of 1 for all deltas, but comes with a step size 
 that grows linearly for each day of the month. The anchor strategy tests the case of minimal retrieval time loss 
-at the cost of more storage usage.
+at the cost of more storage usage. Furthermore, only the first day of the month has dependencies, and can thus 
+cause a big amount of data loss, all the other days only cause data loss for the day itself.
 
 \textbf{Progressive:} The progressive strategy starts with a full snapshot on the first of the month and consequently builds each delta on the 
 previous day as a base. This results in a constant step size of 1 for all deltas, but comes with a dependency depth that 
 grows linearly for each day of the month. The progressive strategy tests the case of saving the most amount of storage space
-at the cost of higher retrieval times.
+at the cost of higher retrieval times. The progressive strategy also has the highest average amount of data loss
+as all remaining days depend on the current day and would thus be lost if a single day corrupts.
 
 \textbf{BST:} The binary search tree (BST) strategy is selected as a middle ground of the anchor and progressive strategies.
 When comparing the ratio of the average step size and the average step count, the anchor and progressive strategies 
 are at the extremes of minimizing the step count and minimizing the step size, as can be seen in Table~\ref{tab:ratio}. 
 To approximate a ratio of 1, a strategy based on a BST is used, where day 1 forms the root node and each node $d$ has 
 child nodes $2 \cdot d$ and $2 \cdot d + 1$. The dependency chain for any day of the month can then be obtained by walking 
-the tree from the node to the root. 
+the tree from the node to the root. For data loss, the BST also sits in the middle of the other two strategies. Nodes 
+further down the tree have fewer dependencies and thus only few lost days upon corruption, while nodes higher up the tree 
+can cause significant loss of data for a single corruption.
 
 % \input{sections/strategy_diagram.tex}
 This however, while getting close to a ratio of 1, can be improved further. A pruned version of the BST is created 
 by splitting the BST into 2 parts, day 1 to 16 are all part of the normal tree while day 17 to 31 are part of a BST 
-of which the root node is node 16%, as illustrated in Figure~\ref{fig:strategies}
-. This optimized BST is the version used in the experiments.
+of which the root node is node 16. This optimized BST is the version used in the experiments.
 
 
 \begin{table}
@@ -66,9 +72,9 @@ of which the root node is node 16%, as illustrated in Figure~\ref{fig:strategies
 
 Table~\ref{tab:overview_li} and Table~\ref{tab:overview_ch} summarize the average storage usage and analysis time for a full month for each tested
 strategy, along with the baseline, across both evaluated datasets. This shows that, as expected, the Progressive strategy manages to save the most space
-over a full month, on average 49.25\% between the 2 datasets compared to the baseline, but that the analysis time for the full month increases significantly. 
-Furthermore, the Anchor strategy doesn't manage to save much space but also doesn't affect the analysis time much. Finally, the BST fits right in between
-saving both a reasonable amount of storage while also taking an average of 34.7\% extra analysis time compared to the baseline. 
+over a full month, on average 49.25\% between the 2 datasets, compared to the baseline, but that the analysis time for the full month increases significantly
+by 98.65\%. Furthermore, the Anchor strategy doesn't manage to save much space but also doesn't affect the analysis time much. Finally, the BST fits right
+in between saving both a reasonable amount of storage while also taking an average of 34.7\% extra analysis time compared to the baseline. 
 
 \begin{table}
     \centering \caption{Average storage usage and analysis time \textbf{per full month} per strategy for the $.li$ dataset}
@@ -148,16 +154,15 @@ have to change, the security signatures are overrepresented in the deltas being 
 that they have no patterns and are thus almost uncompressable for regular algorithms, like gzip, making them even more overrepresented in the 
 storage sizes being taken up by the deltas.
 
-\textbf{Elevated Analysis Time on Day 1:} A consistent peak in analysis time is observed for all strategies on the first day of the month. While present in the sampled $.ch$ dataset
-the baseline does show a similar peak in the $.li$ dataset. Since the only difference between the baseline and the strategies on the first 
-day is the schema decomposition, this may contribute to the higher analysis time, as more data needs to be retrieved, and the data needs 
-to be joined. This however, does not explain why this is not the case for the sampled $.ch$ dataset where all strategies and the baseline 
-have a peak on the first day. Even more so, all other days depend on the first day so the retrieval time of the data from the first day would need to be 
-included in all other days as well. The main hypothesis proposed for this result is a cache somewhere in the pipeline. Between the analysis of
-each day the pyspark cache is full cleared to ensure pyspark does not use any already retrieved data for the analysis. For the rest of the 
-pipeline there is no way to guarantee that no cache is being used, a cache in the S3 storage or anywhere in the pipeline 
-could cause the result of the first day to be loaded faster when it is needed after already being loaded once. This could further be true 
-for other actions in the file system, such as retrieving all files necessary to collect which may be cached by the file system.
+\textbf{Elevated Analysis Time on Day 1:} A consistent peak in analysis time is observed for all strategies on the first day of the month. 
+On the $.li$ dataset this peak is absent in the baseline, suggesting the schema decomposition and resulting volatile join contribute to the 
+elevation, as this is the only difference between the baseline and the DeltaParq versions. On the $.ch$ dataset however, 
+the baseline also exhibits a day 1 peak, indicating that the schema decomposition is not the sole contributor to this elevation.
+Since the PySpark cache is explicitly cleared before the analysis time evaluation of each day, PySpark caching the results and reusing these 
+for the retrieval of the next day can be excluded as a cause. A plausible explanation however, is caching of data and operations at a lower level 
+in the pipeline. The storage system may retain data and metadata, such as file listings and partition discovery results, retrieved for the first day 
+of the month in its own cache and use it for the subsequent days. Conclusively identifying the cause of the elevation would require isolating 
+individual pipeline stages, which was outside the scope of this evaluation.
 
 \textbf{Anchoring Interval:}\label{sec:discussion} The results of the Anchor strategy show the storage usage growing fast over the first few days, this shows that Anchoring every first day 
 of the month may not be the most efficient version of the Anchor strategy. For example, Anchoring on a weekly basis would reduce the 
@@ -166,3 +171,14 @@ that the Anchor strategy offers. A pitfall of introducing a smaller window for t
 shown to result in significantly higher analysis times for those specific days, having full decomposed snapshots more often would thus 
 result in higher average analysis times.
 
+\textbf{Benchmark Limitations:} The evaluation of analysis times was conducted using the existing computing environment used by the OpenINTEL project. While this reflects a realistic scenario, 
+it introduces the limitation of shared resources. Countermeasures were taken to minimize this effect, such as avoiding evaluations during the daily data retrieval 
+window and performing multiple runs to reduce the variance, but it is not a sandboxed environment and results may therefore be influenced by interference from 
+concurrent tasks being executed, especially interactions with the storage which all go through a single pipeline. 
+
+Furthermore, the evaluation was conducted using a single analysis function based on the data of one day at a time. Longitudinal analysis, where the data of 
+multiple days is retrieved and analyzed as a group, was not evaluated. In theory, the total retrieval time for a range of days should be at most 
+the sum of the individual day retrieval times, and potentially less. The retrieval of each single day may have overlap in the base dataframes necessary to 
+reconstruct the original dataframe with other days that need to be retrieved; retrieving these days only once would thus save time. 
+The DeltaParq system already accounts for this as it uses deduplication and a strict order during the dependency resolution required to retrieve all dataframes.
+The effects of this have however not been evaluated and could be of interest for the practical applicability of the system.
